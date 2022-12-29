@@ -12,7 +12,7 @@ C++ es un lenguaje de programación diseñado en 1979 por Bjarne Stroustrup. La 
 ## **Algunos tipos de datos de C++**
 --------------
 |Tipo de dato|Tipo de valor|Tamaño|Descripcion|
-|--|--|--|
+|--|--|--|--|
 |bool|Valor logico|4 Bytes| |
 |int|Numero entero|4 Bytes|Se utiliza un bit para el signo positivo o negativo.|
 |float|Numero de punto flotante (Decimal)|4 Bytes|Se almacenan las bases y los exponentes para almacenarlos en lenguajes como C++.|
