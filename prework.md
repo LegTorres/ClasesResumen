@@ -1,16 +1,20 @@
 
 ---
 
-# **PERSONALIZACION DE ESPACIO DE TRABAJO**
+# **PREWORK: CONFIGURANDO EL ESPACIO DE TRABAJO**
 
 ## **Indice**
-1. [Lista de aplicaciones](#lista-de-aplicaciones)
+1. [Lista de aplicaciones](#lista-de-aplicaciones-por-instalar)
 2. [Extensiones de VS Code](#extensiones-de-vs-code)
-3. [Personalizacion de Vim](#personalizacion-de-vim)
-4. [Personalizando la terminal](#personalizando-la-terminal)
-5. [Instalacion de NodeJS](#instalacion-de-nodejs)
+3. [Configuracion de git](#configuracion-de-git)
+4. [Generando clave SSH](#generando-clave-ssh)
+5. [Personalizacion de Vim](#personalizacion-de-vim)
+6. [Personalizando la terminal](#personalizando-la-terminal)
+7. [Instalacion de NodeJS](#instalacion-de-nodejs)
 
-## **Lista de aplicaciones**
+---
+## **LISTA DE APLICACIONES POR INSTALAR**
+
 - Tilix
 - Vim
 - Brave Web Browser
@@ -33,7 +37,8 @@
 - Sigil
 - Yt-dlp
 
-## **Extensiones de VS Code**
+## **EXTENSIONES DE VS CODE**
+
 - Auto Rename Tag
 - Color Highlight
 - Live Server
@@ -43,7 +48,59 @@
 - C/C++ Compile Run
 - Python
 
-## **Personalizacion de Vim**
+## **CONFIGURACION DE GIT**
+
+Para revisar el estado de la configuracion de git usamos el comando:
+
+~~~SH
+git config --list
+~~~
+
+Configuramos el nombre por defecto de nuestra rama principal:
+
+~~~
+git config --global init.defaultBranch main
+~~~
+
+Asignamos nuestro nombre de usuario e email para poder identificarnos en git:
+
+~~~
+git config --global user.name "[nombre-de-usuario]"
+git config --global user.email "[email-de-usuario]"
+~~~
+
+Para configurar la forma de conciliar push/pull de ramas divergentes con un servidor remoto escribimos lo siguiente:
+
+~~~git
+git config --global pull.ff true
+~~~
+
+## **GENERANDO CLAVE SSH**
+
+Generamos una llave SSH.
+
+```SH
+ssh-keygen -t rsa -b 4096 -C "[correo-electronico]"
+```
+
+Evaluamos que el servidor de llaves SSH este corriendo en el equipo.
+
+~~~
+eval $(ssh-agent -s)
+~~~
+
+Agregamos la llave SSH al servidor SSH.
+
+~~~
+ssh-add $HOME/.ssh/id_rsa
+~~~
+> Nota: Para equipos con MacOS, el comando a utilizar seria el siguiente:
+>
+> `ssh-add -K <ruta-hacia-llave-privada>`  
+> En caso de error solo le borramos la **-K** y se solucionara.
+
+## **PERSONALIZACION DE VIM**
+
 Agregar las siguientes lineas al archivo **.vimrc**
 
 ~~~sh
@@ -54,7 +111,7 @@ set background=dark
 set autoindent        
 ~~~
 
-## **Personalizando la Terminal**
+## **PERSONALIZANDO LA TERMINAL**
 
 ### **Zsh**
 
@@ -111,7 +168,7 @@ POWERLINE_BASH_SELECT=1
 > ~~~
 > 
 
-## **Instalacion de NodeJS**
+## **INSTALACION DE NODE JS**
 Instalando **NodeJS** por medio de el manejador de paquetes **NVM**
 
 ~~~sh
