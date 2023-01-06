@@ -11,6 +11,7 @@
 5. [Personalizacion de Vim](#personalizacion-de-vim)
 6. [Personalizando la terminal](#personalizando-la-terminal)
 7. [Instalacion de NodeJS](#instalacion-de-nodejs)
+8. [Tips para distribuciones Linux](#tips-para-distribuciones-linux)
 
 ---
 ## **LISTA DE APLICACIONES POR INSTALAR**
