@@ -36,6 +36,7 @@
 - Calibre
 - Sigil
 - Yt-dlp
+- clementine
 
 ## **EXTENSIONES DE VS CODE**
 
@@ -94,10 +95,17 @@ Agregamos la llave SSH al servidor SSH.
 ~~~
 ssh-add $HOME/.ssh/id_rsa
 ~~~
+
 > Nota: Para equipos con MacOS, el comando a utilizar seria el siguiente:
 >
 > `ssh-add -K <ruta-hacia-llave-privada>`  
 > En caso de error solo le borramos la **-K** y se solucionara.
+
+Para linux creamos un alias para no tener que introducir la contaseña cada vez que hacemos una conexion con GitHub. En el archivo **.zshro** o **.bashrc** agregamos la siguiente linea:
+
+~~~sh
+alias remoto='eval $(ssh-agent -s) && ssh-add $HOME/.ssh/id_rsa'
+~~~
 
 ## **PERSONALIZACION DE VIM**
 
@@ -190,4 +198,12 @@ npx create-react-app nombre-de-mi-aplicacion
 cd nombre-de-mi-aplicacion
 # Iniciamos el servidor
 npm start
+~~~
+
+## **TIPS PARA DISTRIBUCIONES LINUX**
+
+- Seleccionar los repositorios mas cercanos en la distribucion Manjaro para una descarga mas rapida de los paquetes de software:
+
+~~~sh
+sudo pacman-mirrors -g
 ~~~
