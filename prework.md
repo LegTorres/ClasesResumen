@@ -12,6 +12,7 @@
 6. [Personalizando la terminal](#personalizando-la-terminal)
 7. [Instalacion de NodeJS](#instalacion-de-nodejs)
 8. [Tips para distribuciones Linux](#tips-para-distribuciones-linux)
+9. [Tips para Windows](#tips-para-windows)
 
 ---
 ## **LISTA DE APLICACIONES POR INSTALAR**
@@ -208,3 +209,20 @@ npm start
 ~~~sh
 sudo pacman-mirrors -g
 ~~~
+
+## **TIPS PARA WINDOWS**
+
+### RESOLVER CONFLICTO DE HORA EN ARRANQUE DUAL CON LINUX.
+
+1. Abrir el editor del registro y segir la siguiente ruta:  
+**HKEY_LOCAL_MACHINE > SYSTEM > CurrentControlSet > Control > TimeZoneInformation**
+
+2. Click derecho en un area en blanco y seleccionamos la opcion:  
+**Nuevo > Valor de DWORD (32 bits)**. Le asignamos como nombre:  
+**RealTimeIsUniversal**  
+Le asignamos el valor **1**
+
+3. Abrir el **cmd** como administrador y escribir en el:  
+`sc config w32time start=disabled`
+
+4. Reiniciar el equipo.
