@@ -184,7 +184,15 @@ Instalando **NodeJS** por medio de el manejador de paquetes **NVM**
 ~~~sh
 # Instalando NVM:
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+~~~
 
+Agregar las siguientes lineas al archivo **.zshrc** o **.bashrc**
+~~~sh
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+~~~
+
+~~~sh
 # Instalando NODEJS a traves de NVM
 nvm install node
 
