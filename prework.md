@@ -10,7 +10,7 @@
 4. [Generando clave SSH](#generando-clave-ssh)
 5. [Personalizacion de Vim](#personalizacion-de-vim)
 6. [Personalizando la terminal](#personalizando-la-terminal)
-7. [Instalacion de NodeJS](#instalacion-de-nodejs)
+7. [Instalacion de NodeJS](#instalacion-de-node-js)
 8. [Tips para distribuciones Linux](#tips-para-distribuciones-linux)
 9. [Tips para Windows](#tips-para-windows)
 
@@ -183,7 +183,7 @@ Instalando **NodeJS** por medio de el manejador de paquetes **NVM**
 
 ~~~sh
 # Instalando NVM:
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 ~~~
 
 Agregar las siguientes lineas al archivo **.zshrc** o **.bashrc**
