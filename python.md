@@ -242,8 +242,106 @@ En ocasiones es necesario convertir el tipo de una variable, y para eso contamos
 - **comple()**: Devuelve un complex a partir de un número o secuencia de caracteres.
 
 ## **Condicional IF**
-## **Ciclo FOR**
+Un condicional **if**, es una estructura que nos posibilita definir las acciones a ejecutar si se cumple cierta condición y de ese modo modificar la ejecución de tareas en un programa según se necesite.  
+La sintaxis del condicional if es la siguiente:
+
+~~~py
+#   Programa que nos diga si un numero es igual, menor o mayor que 5.
+
+numero = int(input('Ingrese un numero: '))
+
+if numero > 5:
+    print("El numero es mayor que 5")
+elif numero == 5:
+    print('El numero es igual a 5')
+else:
+    print('El numero es menor que 5')
+~~~
+> Es necesario tener en cuenta que el sangrado es muy importante en cualquier estructura de control de python, y en todos los casos la sentencia de condicion debe finalizar con dos puntos (:).
+
+> NOTA: Es opcional encerrar la condicion entre parentesis. Se recomienda en casos donde mas de una condicion esta presente para mejorar la legibilidad.
+
 ## **Ciclo WHILE**
+Los ciclos **while** son una estructura cíclica, que nos permite ejecutar una o varias líneas de código de manera repetitiva sin necesidad de tener un valor inicial e incluso a veces sin siquiera conocer cuando se va a dar el valor final que esperamos.  
+Ejemplo de bucle **while**:
+
+~~~py
+# Imrpimir las potencias de 2 entre 1 y 1000.
+LIMITE = 1000
+
+contador = 0
+potencia_2 = 2 ** contador
+
+while potencia_2 < LIMITE:
+    print('2 elevado a ' + str(contador) + ' es igual a: ' + str(2 ** contador))
+    contador += 1
+    potencia_2 = 2 ** contador
+
+~~~
+
+## **Ciclo FOR**
+En Python los bucles **for** funcionan de manera ligeramente diferente a como lo hacen en lenguajes como JavaScript o C. Un bucle for establece la variable iteradora en cada valor de una **lista**, **arreglo** o **cadena** proporcionada y repite el código en el cuerpo del bucle for para cada valor de la variable iteradora.  
+Ejemplo:
+
+~~~py
+# Imprimir los numeros de un arreglo uno por uno.
+for i in [1, 2, 3, 4]:
+    print(i) 
+
+
+# Imprimiendo una a una todas las letras de la palabra 'Fulanito'.
+nombre = "Fulanito"
+for letra in nombre:
+    print(letra)
+
+~~~
+
+Cuando los valores de un arreglo para nuestro bucle for son secuenciales, podemos usar la función `range(inicio, final, paso)`. El argumento **final** establece el numero de iteraciones que nuestro bucle ejecutará. Es preciso tener presente que el bucle siempre llega a la posicion inmediatamente antes del especificado en el parametro de range, por ejemplo range(100) llegaria hasta 99.  
+En caso de no especificar el argumento **inicio** Python le asignara el valor de **0**, y nuestro bucle empezará desde esa iteración. Si no se especifica el valor **paso**, será asignado el valor de **1**, por lo que cada iteración irá incrementando de uno en uno por defecto.
+
+~~~py
+# Imprimiendo la tabla del 10
+for i in range(1,11): 
+    print(10 * i)
+
+~~~
+
+Los bucles tambien se pueden interrumpir haciendo uso de las sentencias `break` y `continue`; con la primera 
+terminamos la ejecucion del bucle, mientras que con la segunda hacemos que el programa ignore el codigo a continuacion y que salte a la siguiente iteracion sin haberlo ejecutado.
+
+En el siguiente ejemplo hacemos uso de **continue** para que se imprima **i** unicamente cuando los numeros son pares.
+
+~~~py
+# Imprimiendo los numeros pares.
+
+for i in range(1001):
+    if i % 2 != 0:
+        continue
+
+    print(i)
+    
+~~~
+
+Ahora finalizaremos un bucle de 100 iteraciones cuando llegue al numero 80 con la sentencia **break**.
+
+~~~py
+for i in range(0, 100):
+    print(i)
+
+    if i == 80:
+        break
+
+~~~
+
+> NOTA: La variable que se usa como indice para cada iteracion no necesita ser creada antes de iniciar el bucle.
+
+
+
+
+
+
+
+
 ## **Funciones**
 ## **Manejo de Cadenas de Texto**
 ## **Listas**
