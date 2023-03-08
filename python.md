@@ -14,8 +14,8 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Operadores](#operadores)
 - [Tipos de Datos](#tipos-de-datos)
 - [Condicional IF](#condicional-if)
-- [Ciclo FOR](#ciclo-for)
 - [Ciclo WHILE](#ciclo-while)
+- [Ciclo FOR](#ciclo-for)
 - [Funciones](#funciones)
 - [Manejo de Cadenas de Texto](#manejo-de-cadenas-de-texto)
 - [Listas](#listas)
@@ -333,16 +333,38 @@ for i in range(0, 100):
 
 ~~~
 
-> NOTA: La variable que se usa como indice para cada iteracion no necesita ser creada antes de iniciar el bucle.
-
-
-
-
-
-
-
+> NOTA: La variable que se usa como indice para cada iteracion (por convencion se usa la letra **i**) no necesita ser creada antes de iniciar el bucle.
 
 ## **Funciones**
+Las funciones son un conjunto de procedimiento encapsulados en un bloque, usualmente reciben parámetros, cuyos valores se utilizan para efectuar operaciones y **opcionalmente** retornar un valor.
+
+Una función pueden tener cualquier cantidad de parametros. Si una función tiene más de un parámetro cada uno de ellos debe ir separado por una coma.
+
+Una funcion puede devolver un valor con la instruccion **return**. El codigo escrito despues del return no se ejecutara. En caso de que una funcion devuelva mas de un valor estos deben ir separados por **comas**. Tambien pueden escribirse diversos valores a retornar entre condicionales.
+
+Para declarar una funcion se escribe la palabra reservada **def** delante del nombre de la funcion seguido de parentesis entre los cuales se escribira los argumentos y finalizando con dos puntos. Es importante respetar las identaciones al igual que con las demas estructuras en Python.  
+Ejemplo:
+
+~~~py
+def caracter(n):
+    if n == 0:
+        return 'a'
+
+    return 'x' 
+~~~
+
+> NOTA: Una función puede llamar a otra dentro de sí misma o incluso puede ser enviada como argumento de otra.
+
+Es posible hacer uso de la sentencia return sin devolver ningun valor, en ese caso se utiliza para interrumpir la ejecucion de la funcion en ese punto.
+
+~~~py
+def procedimiento(n, nombre):
+    if(n == 0):
+        print("hola", nombre)
+        return
+    print("adiós", nombre)
+~~~
+
 ## **Manejo de Cadenas de Texto**
 ## **Listas**
 ## **Diccionarios**
