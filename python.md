@@ -17,6 +17,7 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Ciclo WHILE](#ciclo-while)
 - [Ciclo FOR](#ciclo-for)
 - [Funciones](#funciones)
+- [Uso de \*args y \*\*kwargs en Funciones](#uso-de-args-y-kwargs-en-funciones)
 - [Manejo de Cadenas de Texto](#manejo-de-cadenas-de-texto)
 - [Listas](#listas)
 - [Diccionarios](#diccionarios)
@@ -224,13 +225,13 @@ Por ejemplo:
 # Creando un número complejo
 c1 = 4 + 3j
 print(c1)
-(4+3j)
+# (4+3j)
 
 # sumando dos números complejos
 c1 = 2 + 2j
 c2 = 1 + 5j
 print(c1 + c2)
-(3+7j)
+# (3+7j)
 ~~~
 
 Para conocer el tipo de una variable podemos usar las funciones `type()`que nos devuelve el tipo de el objeto que agreguemos como parametro, y `isinstance()`, que recibe como parametros un objeto, y un tipo, y devolvera True si el objeto es del tipo que se pasa como parametro.
@@ -363,6 +364,147 @@ def procedimiento(n, nombre):
         print("hola", nombre)
         return
     print("adiós", nombre)
+~~~
+
+## **Uso de \*args y \*\*kwargs en Funciones**
+Las palabras **\*args (Argumentos Arbitrarios)** y **\*\*kwargs (Key Words Arguments)** nos permiten pasar un numero variable de argunmentos a una funcion.  
+Tanto \*args como \*\*kwargs son nombres utilizados por convencion entre los programadores, pero el uso de estos nombres no es obligatorio. Los que si es necsario respetar es el simbolo de asteriscos simples o dobles delante del nombre del argumento.
+
+Ejemplo de **\*args**:
+
+~~~py
+# Creando una funcion que devuelva el numero mayor de una lista
+
+def maximo(*args):
+    maximo = args[0]
+    for numero in args[1:]:
+        if numero > maximo:
+            maximo = numero
+    return maximo
+
+
+print(maximo(1, 2, 3, 4, 5))
+
+# La funcion devolvera el numero 5
+~~~
+
+Este tipo de argumentos son muy utiles cuando, por ejemplo, tenemos argumentos que dependen de otros argumentos para que nuestra funcion se comporte de una manera o de otra.  
+Por ejemplo, si queremos un programa que nos descargue un archivo de audio o video podriamos especificar los argumentos con base en tipo de archivo que queremos descargar. 
+
+~~~py
+def descargaArchivos(tipo, *args):
+    # Comprobando el numero de argumentos arbitrarios
+    numArgs = len(args)
+    if tipo == "video":
+        if numArgs == 0:
+            print(f"Formato: {tipo}.")
+        elif numArgs == 1:
+            print(f"Formato: {tipo}. Resolucion: {args[0]}.")
+        elif numArgs == 2:
+            print(f"Formato: {tipo}. Resolucion: {args[0]}. FPS: {args[1]}.")
+    elif tipo == "audio":
+        print(f"Formato: {tipo}.")
+    else:
+        print(f"El formato {tipo} no es valido.")
+
+    
+descargaArchivos("video")
+descargaArchivos("video", 720)
+descargaArchivos("video", 1080, 60)
+descargaArchivos("audio")
+descargaArchivos("imagen")
+~~~
+
+~~~
+RESULTADO EN PANTALLA:
+
+Formato: video
+Formato: video. Resolucion: 720
+Formato: video. Resolucion: 1080 FPS: 60
+Formato: audio
+El formato imagen no es valido
+~~~
+
+> NOTA: La diferencia entre usar una lista de argumentos y la sentencia \*args es mas bien una cuestion de notacion. Ambas funcionaran de manera muy parecida pero en el caso de la lista debera encerrarse los elementos dentro de corchetes al momento de llamar la funcion.  
+Ejemplo:
+
+~~~py
+def maximo(numeros):
+    maximo = numeros[0]
+    for numero in numeros[1:]:
+        if numero > maximo:
+            maximo = numero
+    return maximo
+
+
+print(maximo([1, 2, 3, 4, 5]))
+~~~
+
+> NOTA: Los argumentos \*args se pueden manejar como una **lista**
+
+Los argumentos **\*\*kwargs** tambien conocidos como argumentos de palabras clave funcionan de manera muy similar a los argumentos arbitrarios, pero a diferencia de los anteriores estos permiten colocar los argumentos de la funcion de manera desordenada, accediendo al ellos por medio de una palabra clave.   
+Por ejemplo:
+
+~~~py
+def imprimirKwargs(**kwargs):
+    print("\n")
+    print("Los atributos del personaje son los siguientes: ")
+    for clave, valor in kwargs.items():
+        print(f"{clave} ---> {valor}")
+
+
+imprimirKwargs(nombre="Leonidas", clase="Guerrero", Raza="Humano", clan="Espartano")
+~~~
+
+~~~
+RESULTADO EN PANTALLA:
+
+Los atributos del personaje son los siguientes: 
+nombre ---> Leonidas
+clase ---> Guerrero
+Raza ---> Humano
+clan ---> Espartano
+~~~
+
+> NOTA: Los argumentos \*\*kwargs se pueden manejar como un **diccionario**
+
+Los diferentes tipos de argumentos (Obligatorios, \*args y \*\*kwargs) se pueden combinar en una misma funcion. Esto es algo muy comun en las diferentes librerias de python.  
+Ejemplo:
+
+~~~py
+def crearPersonaje(nombre, *args, **kwargs):
+    descripcion = f"{nombre.upper()} \n\n"
+    descripcion += "DESCRIPCION\n\n"
+    for clave, valor in kwargs.items():
+        descripcion += f"- {clave} ---> {valor}\n"
+    descripcion += "\n\nHABILIDADES\n\n"
+    for skill in args:
+        descripcion += f"- {skill}\n"
+    return descripcion
+
+
+personaje = crearPersonaje("Dandelion", "Ataque Fuerte", "Bola de Fuego", "Magia Oscura", clase="mago", raza="No Muerto", mascota="Serpiente")
+
+print(personaje)
+~~~
+
+~~~
+RESULTADO EN PANTALLA:
+
+DANDELION 
+
+DESCRIPCION
+
+- clase ---> mago
+- raza ---> No Muerto
+- mascota ---> Serpiente
+
+
+HABILIDADES
+
+- Ataque Fuerte
+- Bola de Fuego
+- Magia Oscura
 ~~~
 
 ## **Manejo de Cadenas de Texto**
