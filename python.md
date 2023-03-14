@@ -16,13 +16,14 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Condicional IF](#condicional-if)
 - [Ciclo WHILE](#ciclo-while)
 - [Ciclo FOR](#ciclo-for)
-- [Funciones](#funciones)
-- [Uso de \*args y \*\*kwargs en Funciones](#uso-de-args-y-kwargs-en-funciones)
-- [Manejo de Cadenas de Texto](#manejo-de-cadenas-de-texto)
 - [Listas](#listas)
 - [Diccionarios](#diccionarios)
 - [Tuplas](#tuplas)
 - [Conjuntos](#conjuntos)
+- [Funciones](#funciones)
+- [Uso de \*args y \*\*kwargs en Funciones](#uso-de-args-y-kwargs-en-funciones)
+- [Manejo de Cadenas de Texto](#manejo-de-cadenas-de-texto)
+
 - [Manejo de Ficheros](#manejo-de-ficheros)
 
 ## **Estructura Basica de un Programa en Python**
@@ -336,6 +337,214 @@ for i in range(0, 100):
 
 > NOTA: La variable que se usa como indice para cada iteracion (por convencion se usa la letra **i**) no necesita ser creada antes de iniciar el bucle.
 
+## **Listas**
+Las **listas** (conocidos en otros lenguajes de programacion como **vectores**) pertenecen a un conjunto llamado **estructuras de datos**, que nos permiten guardar varios valores dentro de una misma variable. Estas listas son similares a **matrices** (o arrays) que se encuentran en otros lenguajes. Sin embargo, en Python se manejan como variables con muchos elementos.  
+En Python, los elementos de una lista no tienen porque ser del mismo tipo.
+
+Declaracion de una lista:  
+
+~~~py
+# Creando una lista vacia
+listaVacia = []
+
+# Creando una lista con sus valores
+lista = [1, 2, "Hola", True, 2.25]
+~~~
+
+Para imprimir la lista completa no necesitamos escribir los corchetes.  
+Ejemplo:
+
+~~~py
+palabras = ['Hola', 'Como', 'Estas']
+
+print(palabras)
+~~~
+
+~~~
+RESULTADO:
+
+['Hola', 'Como', 'Estas']
+~~~
+
+> Para acceder a un elemento especifico de la lista lo hacemos escribiendo el indice dentro de los corchetes.
+
+Por ejemplo:
+~~~py
+numeros = [1, 2, 3, 4, 5]
+
+# Imprimiendo el numero almacenado en el indice 2.
+print(numeros[2])
+~~~
+
+Para manipular los elementos dentro de las listas podemos usar las siguientes funciones:
+- `.append()`:  
+Agrega un elemento que usemos como parametro al final de la lista.
+- `.pop()`:  
+Elimina un elemento dentro de la lista. Recibe como parametro el indice del elemento a eliminar.
+- `.remove()`:  
+Remueve el primer elemento que encuentre dentro de la lista que coincida con el valor que hayamos pasado como parametro. 
+
+Agregando elementos con la funcion `append()` y concatenado listas:
+
+~~~py
+numeros = []
+# Agregando un elemento al final de la lista.
+numeros.append(10)
+
+# Concatenado una lista con otra existente
+numeros =  mumeros + [15, 20, 25, 30]
+~~~
+
+Eliminando elementos de la lista:
+
+~~~py
+palabras = ['Hola', 'Como', 'Estas', 'Este', 'Dia', '?', '?']
+
+# Eliminando el ultimo simbolo de interrogacion.
+palabras.pop(6)
+
+# Eliminando la palabra Hola.
+palabras.remove('Hola')
+~~~
+
+Para recorrer una lista puedes hacerlo de dos maneras; la primera es por medio de un **ciclo for**, y la segunda por medio de un **ciclo while**
+
+~~~py
+edades = [20, 41, 6, 18, 23]
+
+# Recorriendo los elementos
+for edad in edades:
+    print(edad)
+
+# Recorriendo los índices
+for i in range(len(edaded)):
+    print(edaded[i])
+
+#Recorriendo la lista con while conociendo su longitud con la funcion len().
+indice = 0
+
+while indice < len(edaded):
+    print(edades[indice])
+    indice += 1
+    
+~~~
+
+Si queremos imprimir los elementos de la lista en orden inverso lo podemos hacer de la siguiente manera:
+
+~~~py
+numero = [1, 2, 3, 4, 5]
+
+print(numero[::-1])
+~~~
+
+
+## **Diccionarios**
+Los **diccionarios** son unas **estructuras de datos de llaves y valores** y a diferencia de las listas no vamos a acceder a los elementos a traves de su indice, sino a traves de sus llaves.
+
+Para declarar un diccionario es muy similar a como se declara una lista, pero los elementos se colocan dentro de **llaves** en lugar de entre corchetes, y cada elemento esta constituido por una **clave** y un **valor**, que van separados por dos puntos, y cada elemento del diccionario debe separarse por **comas**.  
+PAra acceder a un elemento de un diccionario se hace a traves de la clave, y este va entre corchetes, como las listas. Tambien puede usarse el metodo **.get()** para obtener el valor de un elemento del diccionario. Este recibe como parametro el nombre de la clave.
+
+Ejemplo:
+
+~~~py
+usuario = {
+    'nombre' : "Fulano",
+    'edad' : 32,
+    'nacionalidad' : "EE.UU.",
+}
+
+# Obteniendo el valor asociado a la clave nombre:
+print(usuario["nombre"]) 
+print(usuario.get("nombre"))
+~~~
+
+> No es necesario respetar la identacion cuando se trabaja con diccionarios, pero si es una buena practica hacerlo para que el codigo sea mas facil de leer. 
+
+Se puede recorrer un diccionario con un ciclo for. Para ayudarnos podemos usar una serie de metodos que nos permiten obtener los elementos de un diccionario. Estos metodos son:
+
+- **.keys()**:  
+Este metodo nos devuelve las llaves del diccionario.
+- **.values()**:  
+Nos devuelve los valores del diccionario. 
+- **.items()**:  
+Nos devuelve tanto las claves como los valores de un diccionario.
+
+por ejemplo:
+~~~py
+# Imprimiendo las llaves del diccionario
+for llave in diccionario.keys():
+    print(llave)
+
+# Imprimiendo los valores del diccionario
+for valor in diccionario.values():
+    print(valor)
+
+# Imprimiendo ambos con el metodo .items
+for llave, valor in diccionario.items():
+    print(llave)
+    print(valor)
+
+# Accediendo a los elementos del diccionario de forma tradicional.
+for llave in diccionario:
+    print(llave, ": ", diccionario[llave], sep='')
+~~~   
+    
+
+## **Tuplas**
+Las TUPLAS son unas estructuras que a diferencia de las listas necesitan menos memoria para funcionar, por lo tanto, se recorren mucho mas rapido. A diferencia de las listas que son estructuras dinamicas, las tuplas son estaticas, por lo que no podemos cambiar su contenido. 
+    Para llamar un elemento dentro de la tupla se hace escribiendo su indice dentro de corchetes: 
+        tupla[indice]
+    Declaracion de una tupla:
+        tupla = (val1, val2, .., valx)
+
+## **Conjuntos**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## **Funciones**
 Las funciones son un conjunto de procedimiento encapsulados en un bloque, usualmente reciben parámetros, cuyos valores se utilizan para efectuar operaciones y **opcionalmente** retornar un valor.
 
@@ -508,10 +717,7 @@ HABILIDADES
 ~~~
 
 ## **Manejo de Cadenas de Texto**
-## **Listas**
-## **Diccionarios**
-## **Tuplas**
-## **Conjuntos**
+
 ## **Manejo de ficheros**
 
 
