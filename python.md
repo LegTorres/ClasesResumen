@@ -7,6 +7,8 @@ Se trata de un lenguaje de programación multiparadigma, ya que soporta parcialm
 Administrado por Python Software Foundation, posee una licencia de código abierto, denominada Python Software Foundation License.
 
 **Tabla de Contenido**
+
+**Conceptos Básicos de Python**
 - [Estructura Basica de un Programa en Python](#estructura-basica-de-un-programa-en-python)
 - [Salida de Datos](#salida-de-datos)
 - [Variables y Literales](#variables-y-literales)
@@ -16,14 +18,14 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Condicional IF](#condicional-if)
 - [Ciclo WHILE](#ciclo-while)
 - [Ciclo FOR](#ciclo-for)
-- [Listas](#listas)
-- [Diccionarios](#diccionarios)
+- [Listas y Matrices](#listas-y-matrices)
 - [Tuplas](#tuplas)
-- [Conjuntos](#conjuntos)
+- [Diccionarios](#diccionarios)
+- [Conjuntos (Sets y Frozensets)](#conjuntos-set-y-frozenset)
 - [Funciones](#funciones)
 - [Uso de \*args y \*\*kwargs en Funciones](#uso-de-args-y-kwargs-en-funciones)
 - [Manejo de Cadenas de Texto](#manejo-de-cadenas-de-texto)
-
+- [Manejo de Datos Numericos](#manejo-de-datos-numericos)
 - [Manejo de Ficheros](#manejo-de-ficheros)
 
 ## **Estructura Basica de un Programa en Python**
@@ -337,8 +339,10 @@ for i in range(0, 100):
 
 > NOTA: La variable que se usa como indice para cada iteracion (por convencion se usa la letra **i**) no necesita ser creada antes de iniciar el bucle.
 
-## **Listas**
-Las **listas** (conocidos en otros lenguajes de programacion como **vectores**) pertenecen a un conjunto llamado **estructuras de datos**, que nos permiten guardar varios valores dentro de una misma variable. Estas listas son similares a **matrices** (o arrays) que se encuentran en otros lenguajes. Sin embargo, en Python se manejan como variables con muchos elementos.  
+## **Listas y Matrices**
+
+### ***Listas***
+Las **listas** (conocidos en otros lenguajes de programacion como **arrays o vectores**) pertenecen a un conjunto llamado **estructuras de datos**, que nos permiten guardar varios valores dentro de una misma variable. Estas listas son similares a **matrices** (o arrays) que se encuentran en otros lenguajes. Sin embargo, en Python se manejan como variables con muchos elementos.  
 En Python, los elementos de una lista no tienen porque ser del mismo tipo.
 
 Declaracion de una lista:  
@@ -437,12 +441,146 @@ numero = [1, 2, 3, 4, 5]
 print(numero[::-1])
 ~~~
 
+### ***Matrices***
+Las **Matrices**, tambien conocidas como **tablas** o **listas de listas** son listas bidimendionales cuyos datos estan almacenados en filas y columnas. Basicamente es una lista cuyos items son en si otras listas. Cada elemento de la lista madre es una **fila**, y los elementos dentro de esta fila son las columnas.  
+
+Por ejemplo, si queremos una matriz en la cual la primera fila almacene los valores de 8, 14 y -6, la segunda 12, 7, 4, y la terrcera -11, 3, 21, su declaracion seria de la siguiente manera:
+
+~~~py
+M1 = [
+    [8,14,-6],
+    [12,7,4],
+    [-11,3,21]
+]
+
+## Imprimiendo la matriz.
+print(M1)
+
+# RESULTADO:
+# 
+# [[8, 14, -6], [12, 7, 4], [-11, 3, 21]]
+
+~~~
+
+Para acceder a un elemento dentro de una matriz lo hacemos por medio de sus indices, al igual que en una lista, pero utilizando doble indice; el primer de ellos hace referencia al elemento de la lista matriz(fila), y el segundo al elemento dentro de la lista hija(columna).
+
+~~~py
+personas = [
+    ['Maria', 'Jose'],
+    [21, 33]
+]
+
+# Accediendo al nombre de Maria, fila 0, columna 0.
+print(personas[0][0])
+
+# Accediendo al ultimo elemento de la fila 0, en este caso Jose.
+print(personas[0][-1])
+~~~
+Para recorrer una matriz, al igual que con las listas podemos recurrir a los ciclos **for** y **while** de manera anidada.  
+Por ejemplo:
+
+~~~py
+personas = [
+    ['Maria', 'Jose'],
+    [21, 33]
+]
+
+# Recorriendo la totalidad de nuestra tabla
+for fila in personas:
+    for columna in fila:
+        print(columna)
+
+
+# Recorriendo los indices de cada lista dentro de la tabla:
+for i in range(len(personas)):
+    for j in range(len(personas[i])):
+        print(personas[i][j])
+
+# Haciendo uso del ciclo While:
+fila = 0
+while fila < len(personas):
+    columna = 0
+    while columna < len(personas[fila]):
+        print(personas[fila][columna])
+        columna += 1
+    fila += 1
+~~~
+
+Podemos modificar el contenido de las matrices utilizando los mismos metodos de las listas simples, lo unicon que debemos hacer es especificar la fila en la que deseamos hacer la modificacion a traves de su indice.  
+Para el caso anterior podemos usar el siguiente ejemplo:
+
+~~~py
+nombre = 'Jesus'
+edad = 33
+
+personas[0].append(nombre)
+personas[1].append(edad)
+~~~
+
+## **Tuplas**
+Las **tuplas** son unas estructuras similares a las listas, pero a diferencia de estas que son dinamicas, las tuplas son estaticas, por lo que no podemos modificar su contenido una vez que se hayan declarado. Debido a que su contenido no se puede cambiar. Por lo general las tuplas se utilizan para representar conceptos del mundo real. Las tuplas al igual que las listas pueden ser anidadas, y contener otras tuplas en su interior.
+Para declarar una tupla se encierra los elementos que la conformaran entre parentesis separados por comas.  
+Ejemplo:
+
+~~~py
+tupla_simple = (1,2,3)
+
+tupla_anidada = (1, 2, (a, b, c), 3)
+~~~
+> NOTA: Las tuplas tambien pueden declararse sin necesidad de los corchetes, pero siempre separando sus elementos por comas.
+
+Podemos convertir listas en tuplas con la funcion `tuple()` y tambien convertir tuplas en listas por medio del metodo `list()`. Una vez convertida en una lista podemos modificar sus valores.
+
+~~~py
+tupla = 1,2,3,4,5
+
+# Imprimiendo el tipo de dato de la variable tupla.
+print(tupla)
+print(type(tupla))
+
+# Convirtiendo la tupla en una lista
+tupla = list(tupla)
+tupla.append(6)
+print(tupla)
+print(type(tupla))
+~~~
+
+Para acceder a los elementos de una tupla se hace igual que a los de una lista, y de la misma forma se puede usar ciclos **for y while** para recorrerlos.
+
+Algunos metodos utiles para trabajar con tuplas son los siguientes:  
+
+- `cont()`:  
+Cuenta el número de veces que el objeto pasado como parámetro se ha encontrado en la lista.
+
+~~~py
+tupla = (1, 1, 1, 3, 5)
+
+# Imprimiendo cuantas veces se encuentra el numero uno dentro de la tupla.
+print(tupla.count(1)) 
+
+# Resultado: # 3
+~~~
+
+Los valores individuales de una tupla pueden ser recuperados asignando la tupla a las variables respectivas. Esto se llama **desempaquetar la tupla**.  
+Ejemplo:
+
+~~~py
+persona = ("Fulano", "De Tal", 33)
+
+# Desempaquetando la tupla en tres variables.
+nombre, apellido, edad = persona
+
+print('Nombre: ', nombre, ', Apellido: ', apellido, ', Edad: ', edad)
+
+# Resultado:
+# Nombre:  Fulano , Apellido:  De Tal , Edad:  33
+~~~
 
 ## **Diccionarios**
 Los **diccionarios** son unas **estructuras de datos de llaves y valores** y a diferencia de las listas no vamos a acceder a los elementos a traves de su indice, sino a traves de sus llaves.
 
 Para declarar un diccionario es muy similar a como se declara una lista, pero los elementos se colocan dentro de **llaves** en lugar de entre corchetes, y cada elemento esta constituido por una **clave** y un **valor**, que van separados por dos puntos, y cada elemento del diccionario debe separarse por **comas**.  
-PAra acceder a un elemento de un diccionario se hace a traves de la clave, y este va entre corchetes, como las listas. Tambien puede usarse el metodo **.get()** para obtener el valor de un elemento del diccionario. Este recibe como parametro el nombre de la clave.
+Para acceder a un elemento de un diccionario se hace a traves de la clave, y este va entre corchetes, como las listas. Tambien puede usarse el metodo **.get()** para obtener el valor de un elemento del diccionario. Este recibe como parametro el nombre de la clave.
 
 Ejemplo:
 
@@ -488,62 +626,154 @@ for llave, valor in diccionario.items():
 for llave in diccionario:
     print(llave, ": ", diccionario[llave], sep='')
 ~~~   
-    
 
-## **Tuplas**
-Las TUPLAS son unas estructuras que a diferencia de las listas necesitan menos memoria para funcionar, por lo tanto, se recorren mucho mas rapido. A diferencia de las listas que son estructuras dinamicas, las tuplas son estaticas, por lo que no podemos cambiar su contenido. 
-    Para llamar un elemento dentro de la tupla se hace escribiendo su indice dentro de corchetes: 
-        tupla[indice]
-    Declaracion de una tupla:
-        tupla = (val1, val2, .., valx)
+## **Conjuntos (Set y Frozenset)**
 
-## **Conjuntos**
+### ***Set***
+Tambien conocidos como **sets** son un conjunto es una colección de elementos **no ordenada** que no se repiten. Estas características hacen que los principales usos de esta clase sean conocer si un elemento pertenece o no a una colección y eliminar duplicados de un tipo secuencial (list, tuple o str).
 
+Además, esta clase también implementa las típicas operaciones matemáticas sobre conjuntos: unión, intersección, diferencia. Su contenido puede ser mutable, por lo tanto podemos agregar, modificar o eliminar elementos. Podemos agregar elementos de cualquier tipo, entre ellos tuplas, pero no podemos almacenar ni **listas** ni **diccionarios**.
 
+Para declarar un conjunto lo hacemos encerrando los valores entre **llaves** al igual que con un diccionario, pero a diferencia de este ultimo no se utiliza una clave.  
+Ejemplo de declaracion de un conjunto:
 
+~~~py
+conjunto = {'Python', 'Go', ('C', 'C++', 'C#'), 'JavaScript'}
 
+print(conjunto)
 
+# RESULTADO:
+#
+# {('C', 'C++', 'C#'), 'Python', 'JavaScript', 'Go'}
+~~~
 
+> NOTA: Los elementos repetidos seran eliminados al momento de crear el conjunto.
 
+Los elementos que se pueden añadir a un conjunto deben ser de tipo hashable. Un objeto es hashable si tiene un valor de hash que no cambia durante todo su ciclo de vida. En principio, los objetos que son instancias de clases definidas por el usuario son hashables. También lo son la mayoría de tipos inmutables definidos por Python.
 
+Se puede convertir diferentes tipos de datos en conjuntos con la funcion `set()`. Tambien se usa la funcion set() para crear conjuntos vacios, ya que al utilizar los signos de llaves sin nada en su interior estamos creando un diccionario vacio y no un conjunto.
 
+~~~py
+palabra = "hola a todos"
 
+mi_set = set(palabra)
 
+conjunto_vacio = set()
 
+print(mi_set)
 
+# Resultado:
+#
+# {'d', 'o', 'l', 'a', ' ', 's', 'h', 't'}
+~~~
 
+Dado que los conjuntos son colecciones desordenadas, en ellos no se guarda la posición en la que son insertados los elementos como ocurre en los tipos list o tuple. Es por ello que no se puede acceder a los elementos a través de un índice. Sin embargo, sí se puede acceder y/o recorrer todos los elementos de un conjunto usando un bucle **for**:
 
+~~~py
+conjunto = {'Python', 'Go', ('C', 'C++', 'C#'), 'JavaScript'}
 
+for e in conjunto:
+    print(e)
 
+# RESULTADO:
+#
+# Go
+# Python
+# JavaScript
+# ('C', 'C++', 'C#')
+~~~
 
+Para saber si un elemento esta dentro de un conjunto se utiliza el operador `in`. Este devolvera **True** o **False** si el elemento esta o no en el conjunto.
 
+Ejemplo:
 
+~~~py
+conjunto = {'Python', 'Go', ('C', 'C++', 'C#'), 'JavaScript'}
 
+print('Python' in conjunto)
+print('Pearl' in conjunto)
 
+# RESULTADO:
+#
+# True
+# False
 
+~~~
 
+### ***Frozenset***
+La principal diferencia es que set es mutable, por lo que después de ser creado, se pueden añadir y/o eliminar elementos del conjunto, como veremos en secciones posteriores. Por su parte, frozenset es inmutable y su contenido no puede ser modificado una vez que ha sido inicializado.
+Para declarar un frozenset lo hacemos con la funcion frozenset() pasando una lista de calores como parametro.  
+Por ejemplo:
 
+~~~py
+fs = frozenset([1, 2, 3])
+print(fs)       
 
+# RESULTADO:
+# 
+# frozenset({1, 2, 3})
+~~~
 
+El único modo en Python de tener un conjunto de conjuntos es utilizando objetos de tipo frozenset como elementos del propio conjunto.  
+Ejemplo:
 
+~~~py
+mi_frozenset1 = frozenset([1, 2])
+mi_frozenset2 = frozenset([3, 4])
+mi_set = {mi_frozenset1, mi_frozenset2}
+print(mi_set)
 
+# RESULTADO:
+# 
+# {frozenset({3, 4}), frozenset({1, 2})}
+~~~
 
+### ***Metodos***
+Algunos metodos para trabajar con conjuntos son los siguientes:
 
+- `.add()`:  
+Añade un elemento a un conjunto, simpre y cuando dicho elemento no exista ya en el conjunto.
+-`.update()`:  
+Añade un elemento al conjunto. Puede tomar como argumento una lista, tupla, string, conjunto o cualquier objeto de tipo iterable.
+- `.discard()`:  
+Elimina el elemento que hayamos pasado como parametro.
+- `.remove()`:  
+Tambien elimina el elemento del conjunto, pero a diferencia de discard(), si el elemento no existe lanza la excepcion **KeyError**.
+- `.pop()`:  
+Devuelve un elemento aleatorio del conjunto y lo elimina. Si el conjunto esta vacio devuelve un **KeyError**.
+- `.clear()`:  
+Elimina todos los elementos del conjunto.
 
+~~~py
+numeros = {1, 2, 3, 4, 5, 6}
+print(numeros)
 
+# Agregando elementos al conjunto.
+numeros.add(7)
+print(numeros)
 
+# Agregando elementos al conjunto con el metodo .update()
+numeros.update([8,9,10,11,12])
+numeros.update((13, 14, 15))
+print(numeros)
 
+# Eliminando elementos del conjunto con .discard(), .remove() y .pop().
+numeros.discard(11)
+numeros.remove(12)
+print(numeros)
 
+print(numeros.pop())
+print('numero eliminado con pop', numeros)
 
-
-
-
-
-
-
-
-
-
+# RESULTADO:
+#
+# {1, 2, 3, 4, 5, 6}
+# {1, 2, 3, 4, 5, 6, 7}
+# {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+# {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15}
+# 1
+# numero eliminado con pop {2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15}
+~~~
 
 ## **Funciones**
 Las funciones son un conjunto de procedimiento encapsulados en un bloque, usualmente reciben parámetros, cuyos valores se utilizan para efectuar operaciones y **opcionalmente** retornar un valor.
@@ -573,6 +803,13 @@ def procedimiento(n, nombre):
         print("hola", nombre)
         return
     print("adiós", nombre)
+~~~
+
+Para dejar un espacio en una funcion o en una estructura de control que no quieres programar en este momento puedes escribir la palabra reservada `pass` que le hara saber a python que escribiras ese codigo despues.
+
+~~~py
+def miFuncion():
+    pass
 ~~~
 
 ## **Uso de \*args y \*\*kwargs en Funciones**
@@ -717,7 +954,99 @@ HABILIDADES
 ~~~
 
 ## **Manejo de Cadenas de Texto**
+Algunas funciones útiles para manipular cadenas de texto son las siguientes: 
 
+|Funcion          | Hace                                                                        |
+|-----------------|-----------------------------------------------------------------------------|
+|`.upper()`       | Cambia todo el texto a mayusculas.                                          |
+|`.capitalize()`  | Cambia la primera letra a mayuscula.                                        |
+|`.lower()`       | Cambia toda el texto a minuscula.                                           |
+|`.strip()`       | Elimina los espacios entre caracteres.                                      |
+|`.replace(x, y)` | Reemplaza **x** por **y**.                                                  |
+|`len(x)`         | Devuelve la longitud de x.                                                  |
+|`.split(sep='')` | Divide una cadena en una lista de palabras separandolas por el valor de sep.|
+
+> NOTA sobre `.split(sep='')`: Si no se pasa el argumento `sep`, o el valor de este es `None` la cadena se dividira en cada una de sus palabras separadas por espacios, y estos se eliminaran, ademas de cualquier caracter que se imprima en blanco como `\n, \t` o `\r` Ademas, si se especifica el argumento sep, los delimitadores que aparezcan juntos no se agrupan. En su lugar, se crea como token una **cadena vacía** `''`.  
+Ademas podemos utilizar el argumento `maxsplit` para establecer un limite a el numero de divisiones a realizar.
+
+~~~py
+# Dividiendo dos veces la cadena saludo usando como punto de 
+# division un espacio en blanco, lo que produce
+# una lista con tres secciones.
+saludo = 'Hola que tal como estas este dia?' 
+
+palabras = saludo.split(sep=' ', maxsplit=2)
+print(palabras)
+
+# RESULTADO:
+#
+# ['Hola', 'que', 'tal como estas este dia?']
+
+
+~~~
+
+Las cadenas de texto se pueden manipular de manera similar a las listas a traves de sus indices. Para eso lo hacemmos de la siguiente manera:
+
+|Nomenclatura         | Hace                                                           |
+|---------------------|----------------------------------------------------------------|
+|`cadena[indice]`     | Caracter en la posicion indice.                                |
+|`a[x:y]`             | Caracteres de **a** desde indice **x** hasta indice **y - 1**. |
+|`a[x:y:z]`           | **z** determina cuantas iteraciones intercalara.               | 
+|`a[::-z]`            | Orden de caracteres invertidos cada **z** iteraciones.         | 
+
+> NOTA sobre `a[x:y]`:  La cadena se detiene justo en el caracter inmediatamente antes del indice **y**, y no sera incluido, por lo tanto, si queremos tomar en cuenta ese caracter tenemos que incrementar en **1** el valor de **y**. De esta forma, en una cadena de 5 elementos, si queremos que la operacion devuelva hasta el caracter final(en este caso, el caracter en el indice `4`) tendremos que especificar el numero `5`.  
+Se puede obviar **x** y **y** y dejar un espacio vacio.
+
+> NOTA sobre `a[x:y:z]`: A manera de ejemplola en la variable `cadena = 'ABCDEFGHIJ'` la funcion `cadena[0:10:2]` nos devolveria `'ACEGI'` ya que iria imprimiendo los caracteres de la cadena de dos en dos.
+
+> NOTA sobre `a[::-z]`: Al ser un numero negativo empezara a recorrer la cadena desde el ultimo elemento, y dependiendo de el numero que especifiquemos tomara el caracter en la iteracion correspondiente. Por ejemplo, si tenemos la cadena `numeros='012345'` la funcion `print(numeros[::-2])` devolvera `531`. Al igual que con los numeros positivos podemos establecer un inicio y fin con los dos primeros valores entre dos puntos, pero el caracter ubicado en el indice del  segundo valor, si es espe en 
+
+~~~py
+# Programa que identifique si una palabra es palindroma
+
+palabra = input('Ingrese una palabra para verificar si es palindromo: ')
+if palabra == palabra[::-1]:
+    print('Es un palindromo')
+else:
+    print('No es un palindromo.')
+~~~
+
+Para concatenar cadenas de texto podemos utilizar el operador `+`. Y podemos repetir una cadena un determinado numero de veces usando el operador `*`
+~~~py
+palabra = 'Hola ' * 5
+print(palabra)
+
+# RESULTADO:
+#
+# Hola Hola Hola Hola Hola 
+~~~
+
+Si se escribe el contenido de una variable de texto entre triple comilla python tomara en cuenta el numero de lineas que se escriba, incluyendo los saltos de linea.  
+Por ejemplo:
+
+~~~py
+palabra = """
+    Esta es una cadena de texto
+    formada por multiples lineas
+    !!!!!
+"""
+
+print(palabra)
+
+# RESULTADO:
+
+# Esta es una cadena de texto
+# formada por multiples lineas
+# !!!!!
+~~~
+
+
+## **Manejo de Datos Numericos**
+Ademas de los operadores para asignar o comparar valores numericos existen muchas funciones que nos facilitan el trabajar con enteros o decimales. Algunas de las funciones son:
+
+|Funcion            | Hace                                                     |
+|-------------------|----------------------------------------------------------|
+|`round(a, b)`      | Reduce a **b** la cantidad de numeros decimales de **a** |
 ## **Manejo de ficheros**
 
 
