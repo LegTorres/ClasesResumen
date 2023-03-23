@@ -6,7 +6,7 @@ Se trata de un lenguaje de programación multiparadigma, ya que soporta parcialm
 
 Administrado por Python Software Foundation, posee una licencia de código abierto, denominada Python Software Foundation License.
 
-**Tabla de Contenido**
+**TABLA DE CONTENIDO**
 
 **Conceptos Básicos de Python**
 - [Estructura Basica de un Programa en Python](#estructura-basica-de-un-programa-en-python)
@@ -26,7 +26,26 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Uso de \*args y \*\*kwargs en Funciones](#uso-de-args-y-kwargs-en-funciones)
 - [Manejo de Cadenas de Texto](#manejo-de-cadenas-de-texto)
 - [Manejo de Datos Numericos](#manejo-de-datos-numericos)
+- [Numeros Aleatorios]()
 - [Manejo de Ficheros](#manejo-de-ficheros)
+
+**Programacion Orientada a Objetos**
+- [Clases y Objetos]()
+- [Herencia]()
+- [Encapsulamiento]()
+- [Polimorfismo]()
+
+**Conceptos Avanzados**
+- [Manejo de Excepciones]()
+- [Funciones Lambda]()
+- [Funciones Map y Filter]()
+- [Modulos y Paquetes]()
+- [Interfaces Graficas]()
+- [Decoradores]()
+
+**Manejo de Bases de Datos**
+- [SQLite]()
+
 
 ## **Estructura Basica de un Programa en Python**
 Es buena practica crear una funcion principal denominada `run()` o `main()` que es la que correra nuestro programa, y dentro de ella escribir todo el codigo de nuestra aplicacion.
@@ -324,6 +343,25 @@ for i in range(1001):
 
     print(i)
     
+~~~
+
+Otro ejemplo utilizando la sentencia **continue** es el siguiente donde verificamos si un numero ingresado es primo o no:
+
+~~~py
+contador = 0
+numero = int(input('Ingresa un numero: '))
+
+for i in range(1, numero + 1):
+    if i == 1 or i == numero:
+        continue
+    if numero % i == 0:
+        contador += 1
+
+if contador == 0:
+    print('Es primo')
+else:
+    print('No es primo')
+
 ~~~
 
 Ahora finalizaremos un bucle de 100 iteraciones cuando llegue al numero 80 con la sentencia **break**.
@@ -956,15 +994,16 @@ HABILIDADES
 ## **Manejo de Cadenas de Texto**
 Algunas funciones útiles para manipular cadenas de texto son las siguientes: 
 
-|Funcion          | Hace                                                                        |
-|-----------------|-----------------------------------------------------------------------------|
-|`.upper()`       | Cambia todo el texto a mayusculas.                                          |
-|`.capitalize()`  | Cambia la primera letra a mayuscula.                                        |
-|`.lower()`       | Cambia toda el texto a minuscula.                                           |
-|`.strip()`       | Elimina los espacios entre caracteres.                                      |
-|`.replace(x, y)` | Reemplaza **x** por **y**.                                                  |
-|`len(x)`         | Devuelve la longitud de x.                                                  |
-|`.split(sep='')` | Divide una cadena en una lista de palabras separandolas por el valor de sep.|
+|Funcion          | Hace                                                                          |
+|-----------------|-------------------------------------------------------------------------------|
+|`.upper()`       | Cambia todo el texto a mayusculas.                                            |
+|`.capitalize()`  | Cambia la primera letra a mayuscula.                                          |
+|`.lower()`       | Cambia toda el texto a minuscula.                                             |
+|`.strip()`       | Elimina los espacios entre caracteres.                                        |
+|`.replace(x, y)` | Reemplaza **x** por **y**.                                                    |
+|`len(x)`         | Devuelve la longitud de x.                                                    |
+|`.split(sep='')` | Divide una cadena en una lista de palabras separandolas por el valor de sep.  |
+|`x.join(a)`      | Retorna un string de todos los elementos de un iterable, separados por **x**.|
 
 > NOTA sobre `.split(sep='')`: Si no se pasa el argumento `sep`, o el valor de este es `None` la cadena se dividira en cada una de sus palabras separadas por espacios, y estos se eliminaran, ademas de cualquier caracter que se imprima en blanco como `\n, \t` o `\r` Ademas, si se especifica el argumento sep, los delimitadores que aparezcan juntos no se agrupan. En su lugar, se crea como token una **cadena vacía** `''`.  
 Ademas podemos utilizar el argumento `maxsplit` para establecer un limite a el numero de divisiones a realizar.
@@ -1002,13 +1041,16 @@ Se puede obviar **x** y **y** y dejar un espacio vacio.
 > NOTA sobre `a[::-z]`: Al ser un numero negativo empezara a recorrer la cadena desde el ultimo elemento, y dependiendo de el numero que especifiquemos tomara el caracter en la iteracion correspondiente. Por ejemplo, si tenemos la cadena `numeros='012345'` la funcion `print(numeros[::-2])` devolvera `531`. Al igual que con los numeros positivos podemos establecer un inicio y fin con los dos primeros valores entre dos puntos, pero el caracter ubicado en el indice del  segundo valor, si es espe en 
 
 ~~~py
-# Programa que identifique si una palabra es palindroma
+# Programa que verifique si una palabra es palindromo
+palabra = input('Escribe una palabra: ')
 
-palabra = input('Ingrese una palabra para verificar si es palindromo: ')
+palabra = palabra.replace(' ', '')
+palabra = palabra.lower()
+
 if palabra == palabra[::-1]:
-    print('Es un palindromo')
+    print('La palabra ' + palabra + ' es un palindromo.')
 else:
-    print('No es un palindromo.')
+    print('La palabra ' + palabra + ' NO es un palindromo.')    
 ~~~
 
 Para concatenar cadenas de texto podemos utilizar el operador `+`. Y podemos repetir una cadena un determinado numero de veces usando el operador `*`
@@ -1047,12 +1089,166 @@ Ademas de los operadores para asignar o comparar valores numericos existen mucha
 |Funcion            | Hace                                                     |
 |-------------------|----------------------------------------------------------|
 |`round(a, b)`      | Reduce a **b** la cantidad de numeros decimales de **a** |
+
+## **Numeros Aleatorios**
+Para hacer operaciones con numeros aleatorios necesitamos importar el modulo `random`. Una vex=z importado podemos hacer uso de sus metodos. Algunas de sus funciones son:
+
+- `random.randinit(x, y)`:  
+Genera un numero aleatorio entre un random entre los valores que pasemos como argumentos.
+- `random.choice(a)`:  
+Retorna un elemento aleatorio extraido de una secuencia pasada como argumento. Si esa secuencia esta vacia, la funcion genera un `IndexError`
+
+Ejemplos de uso modulo random:
+
+~~~py
+import random 
+
+# Generando un numero entero aleatorio entre 1 y 100.
+numero_aleatorio = random.randint(1, 100) 
+numero_elegido = int(input('Elige un numero entre 1 y 100: '))
+
+while numero_elegido != numero_aleatorio:
+    if numero_elegido < numero_aleatorio:
+        print('Busca un numero mas grande')
+    else:
+        print('Busca un numero menor')
+    numero_elegido = int(input('Elige otro numero: '))
+
+print('El numero a adivinar era: '+ str(numero_aleatorio) + '. Ganaste!')
+~~~
+
+Ejemplo de una generador de contraseñasa aleatorias.
+
+~~~py
+# Programa que genere una contraseña con caracteres aleatorios de una lista.
+import random
+
+LETRAS = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '+', '-', '/', '@', '_', '?', '!', '[', '{', '(', ')', '}', ']', ',', ';', '.', '>', '<', '~', '°', '^', '&', '$', '#', '"'
+]
+
+contrasena = []
+
+for i in range(15):
+    contrasena.append(random.choice(LETRAS) )
+    
+# Pasando la lista a un string.
+contrasena = ''.join(contrasena)
+~~~
+
 ## **Manejo de ficheros**
+La lectura y escritura de informacion en archivos usando Python es bastante sencilla, y podemos hacerlo a travez del uso de las siguientes funciones :
+
+- `open(nombre-ruta,  modo, encoding='utf-8')`:  
+Permite abrir un archivo existente o crear uno en caso de que no existiese. Luego podremos leerlo o incluso escribir en el. Es indispensable abrir el fichero con esta funcion para poder trabajar con el.  
+El primer parametro es el nombre del archivo a abrir. El segundo es el modo en el que vamos a abrir el archivo. El tercer parametro nos permite especificar que codificacion de caracteres usaremos en nuestro archivo. Es necesario para no tener problemas con simbolos de algunos idiomas que python pueda que no identifique correctamente, como los tildes por ejemplo.  
+El argumento para especificar el modo de apertura puede ser:
+    - `r`:  
+    Abre el archivo en modo de solo lectura. Es decir, no lo podremos modificar, solo obtener y usar sin contenido sin realizar cambio alguno. Si el archivo no existe, el programa fallará.
+    - `r+`:  
+    Abre el archivo en modo lectura y escritura. Pudiendo así no solo obtener y usar su contenido, sino modificarlo si se desea.
+    - `w`:  
+    Abre el archivo en solo modo escritura. Va a sustituir el archivo original si existe antes o crear uno nuevo si no existe y el contenido original que tenga ese archivo se perderá una vez escribas en él.
+    - `a`:  
+    Abre el archivo para escritura, pero permitiendo agregar contenido al existente. Esto quiere decir que el contenido original se conserva y lo que escribas se agregará al final del archivo. Si el archivo no existe, se crea uno nuevo.
+    - `a`+:  
+    Abre el archivo en modo de escritura para agregar contenido y lectura, permitiendo así agregar contenido al final y leerlo también.
+    - `x`: Permite crear el archivo.
+    - `t`: (Text mode), para trabajar con ficheros de texto.
+    - `b`: (Bytes), para archivos como fotos
+- `archivo.read()`:  
+Lee todo el fichero
+- `archivo.readline()`:  
+Lee la primera linea de un fichero. Este metodo mantiene el cursor que al ser llamada la funcion se desplaza al principio de la siguiente linea, por tanto, si lo llamamos una segunda vez leera la segunda linea y al finalizar se trasladara al principio de la tercera y asi suscesivamente cada vez que lo llamemos.
+- `archivo.readlines()`:  
+Lee todo el documento y cada linea la guarda en una posicion de una lista. Al igual que el metodo readline, este lee el fichero desde la posicion del cursor.
+- `archivo.write(texto)`:  
+Permite escribir el texto que pasemos como argumento al metodo. Este texto se agregara al final del documento. Esta funcion no agrega saltos de linea.
+- `archivo.writelines(lista)`:  
+Escribe cualquier el contenido de una lista o cualquier otro iterador al archivo.
+- `print(texto, file=nombre-archivo)`:  
+Podemos usarla para imprimir valores en un archivo por medio del parámetro `file`, en el que especificamos el nombre o la ruta de nuestro fichero. Esto nos brinda la ventaja de su funcionamiento habitual (saltos de línea, espacios y demás).
+- `archivo.readable()`:  
+Nos devuelve True o False dependiendo si un fichero es legible o no.
+- `archivo.writable()`:  
+Nos devuelve True o False dependiendo si un fichero puede ser escrito o no.
+- `archivo.seek(x)`:  
+Desplaza el cursor **x** caracteres.
+- `archivo.close()`:  
+Cierra nuestro archivo liberando memoria. Esto es INDISPENSABLE realizarlo siempre que hemos abierto un fichero
+
+~~~py
+fichero = open('./fichero.txt', 'rt', encoding='utf-8')
+
+#primera_linea = fichero.readline()
+#fichero.write('Hola a todo el mundo')
+#lineas = fichero.readlines()
+
+listaContenido = [
+    'Primera linea de nuestro archivo',
+    'Segunda linea',
+    'Tercera linea'
+]
+listaContenido = map(lambda line: line + '\n', listaContenido)
+fichero.writelines(listaContenido)
+fichero.close()
+~~~
+
+Ejemplo de un programa que modifique la ruta de los archivos en una lista de reproduccion de Windows para poder ser utilizada en Linux.
+
+~~~py
+import sys
+
+def changePath(archivoOrigen, nuevaRuta, nombreArchivoDestino):
+
+    print('CONVIRTIENDO LISTA DE REPRODUCCION')
+
+    archivo = open(archivoOrigen, "r", encoding='utf-8')
+    contenido = archivo.read()
+
+    nuevoArchivo = open(nombreArchivoDestino, 'a', encoding='utf-8')
+    
+    lineas=contenido.split(sep='\n')
+
+    for numeroDeLinea in range(len(lineas)):
+        
+        linea = str(lineas[numeroDeLinea])
+
+        if linea[0] != '#':
+            carpetas = linea.split(sep="\\")
+            carpetas[0] = nuevaRuta
+
+            nuevaLinea = ""
+            for nivelDirectorio in range(len(carpetas)):
+                nuevaLinea = nuevaLinea + "/" + str(carpetas[nivelDirectorio])
+
+            linea = nuevaLinea
+     
+        print(linea)
+        nuevoArchivo.write(linea + '\n')
+
+    archivo.close()
+    nuevoArchivo.close()
+    print('\n Listo!: ' + str(len(lineas)) + ' Lineas Procesadas')
+
+def removeFirstSlash(ruta):
+
+    if ruta[0] == '/':
+        ruta = ruta[1:]
+        return ruta
+
+def main():
+
+    origen = sys.argv[1]
+    ruta =  removeFirstSlash(sys.argv[2])
+    destino = sys.argv[3]
+
+    changePath(origen, ruta,destino)
+
+    
+
+if __name__ == '__main__':
+    main()
 
 
-
-
-
-
-Informacion complementaria 
-https://www.programarya.com/Cursos/Python
+~~~
