@@ -30,22 +30,23 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Manejo de Ficheros](#manejo-de-ficheros)
 
 **Programacion Orientada a Objetos**
-- [Clases y Objetos]()
-- [Herencia]()
-- [Encapsulamiento]()
-- [Polimorfismo]()
+- [Clases y Objetos](#clases-y-objetos)
+- [Herencia](#herencia)
+- [Encapsulamiento](#encapsulamiento)
+- [Polimorfismo](#polimorfismo)
 
 **Conceptos Avanzados**
-- [Manejo de Excepciones]()
-- [Funciones Lambda]()
-- [Funciones Map y Filter]()
-- [Modulos y Paquetes]()
-- [Interfaces Graficas]()
-- [Decoradores]()
+- [Manejo de Excepciones](#manejo-de-excepciones)
+- [Funciones Lambda](#funciones-lambda)
+- [Funciones Map y Filter](#funciones-map-y-filter)
+- [Modulos y Paquetes](#modulos-y-paquetes)
+- [Interfaces Graficas](#interfaces-graficas)
+- [Decoradores](#decoradores)
 
 **Manejo de Bases de Datos**
-- [SQLite]()
+- [SQLite](#sqlite)
 
+# CONCEPTOS BASICOS DE PYTHON
 
 ## **Estructura Basica de un Programa en Python**
 Es buena practica crear una funcion principal denominada `run()` o `main()` que es la que correra nuestro programa, y dentro de ella escribir todo el codigo de nuestra aplicacion.
@@ -1084,11 +1085,12 @@ print(palabra)
 
 
 ## **Manejo de Datos Numericos**
-Ademas de los operadores para asignar o comparar valores numericos existen muchas funciones que nos facilitan el trabajar con enteros o decimales. Algunas de las funciones son:
+Ademas de los operadores para asignar o comparar valores numericos existen muchas funciones que nos facilitan el trabajar con enteros o decimales. Algunas de las funciones y nomenclaturas son:
 
 |Funcion            | Hace                                                     |
 |-------------------|----------------------------------------------------------|
 |`round(a, b)`      | Reduce a **b** la cantidad de numeros decimales de **a** |
+|`x:.nf`            | Establece **n** decimales a un valor float **x**         |
 
 ## **Numeros Aleatorios**
 Para hacer operaciones con numeros aleatorios necesitamos importar el modulo `random`. Una vex=z importado podemos hacer uso de sus metodos. Algunas de sus funciones son:
@@ -1177,20 +1179,40 @@ Desplaza el cursor **x** caracteres.
 - `archivo.close()`:  
 Cierra nuestro archivo liberando memoria. Esto es INDISPENSABLE realizarlo siempre que hemos abierto un fichero
 
-~~~py
-fichero = open('./fichero.txt', 'rt', encoding='utf-8')
+Ejemplos de lectura de ficheros.
 
-#primera_linea = fichero.readline()
-#fichero.write('Hola a todo el mundo')
-#lineas = fichero.readlines()
+~~~py
+# Abrimos el fichero y leemos su contenido.
+fichero = open('./fichero.txt', 'r', encoding='utf-8')
+
+# Leyendo todo el documento y almacenando su contenido en una lista.
+lineas = fichero.readlines()
+print(lineas)
+
+# Cerrando el fichero.
+fichero.close()
+~~~
+
+Ejemplo de escritura de ficheros:
+
+~~~py
+# Abrimos el fichero en modo de escritura conservando su contenido.
+fichero = open('./fichero.txt', 'a', encoding='utf-8')
 
 listaContenido = [
     'Primera linea de nuestro archivo',
     'Segunda linea',
     'Tercera linea'
 ]
+
+# Si quisieramos evitar la necesidad de ir agregando un salto de linea 
+# a cada elemento de la lista podriamos hacerlo con la siguiente fincion lambda.
 listaContenido = map(lambda line: line + '\n', listaContenido)
+
+# Escribiendo el contenido de la lista en el fichero.
 fichero.writelines(listaContenido)
+
+# Cerrando el fichero.
 fichero.close()
 ~~~
 
@@ -1231,11 +1253,13 @@ def changePath(archivoOrigen, nuevaRuta, nombreArchivoDestino):
     nuevoArchivo.close()
     print('\n Listo!: ' + str(len(lineas)) + ' Lineas Procesadas')
 
+
 def removeFirstSlash(ruta):
 
     if ruta[0] == '/':
         ruta = ruta[1:]
         return ruta
+
 
 def main():
 
@@ -1245,10 +1269,85 @@ def main():
 
     changePath(origen, ruta,destino)
 
-    
 
 if __name__ == '__main__':
     main()
 
 
 ~~~
+
+
+# PROGRAMACION ORIENTADA A OBJETOS
+La programacion orientada a objetos es un paradigma de programacion que consiste en imitar los objetos de la vida real, con sus propiedades y comportamientos en los lenguajes de programacion. Este paradigma de programacion nos permite generar codigo mas modular, reutilizar el codigo creado, lo que simplifica el proceso de desarrollo.
+Un objeto se forma principalmente por dos elementos, que son:
+- Datos: Describen el estado o las caracteristicas de un objeto. A estos les llamamos **propiedades** o **atributos**.
+- Codigo: Ejecuta ciertas funcionalidades o comportamientos de dicho objeto. A estos les llamaremos **metodos**.
+
+Los pilares de la programacion orientada a objetos son los siguientes:
+- Herencia.
+- Polimorfismo.
+- Encapsulacion.
+- Abstraccion.
+
+## **Clases y Objetos**
+Una **clase** es el modelo para un grupo de objetos. La clase define los metodos y atributos comunes de todos los objetos que perteneces a una misma clase. A un objeto que pertenece a una clase se le llama **instancia**.
+
+Para declarar una clase lo hacemos escribiendo la palabra reservada `class` seguida del nombre de la clase. Por convencion se suele escribir el nombre de las clases con letrta inicial mayuscula.
+
+Despues de haber creado la clase es importante definir los atributos de la clase por medio del metodo `__init__(self, [args...])`, que es el constructor de nuestra clase y es elencargado de inicializar nuestro objeto con los atributos que le asignemos por medio de los argumentos. El argumento `self`(nombre dado por convencion) hace referencia a la instancia actual de la clase(al objeto que estamos creando en ese momento.), y debe escribirse como primer parametro en cada metodo que creemos en nuestras clases. Este metodo se ejecuta en el instante en que creamos nuestro objeto.
+
+Para crear un objeto de una clase simplemente le asignamos el nombre como a cualquier variable agignandole como valor el nombre de la clase con el valor de sus atributos entre parentesis.
+
+Ejemplo de creacion de una clase y de su constructor y sus instancias.
+
+~~~py
+# Declaracion de la clase
+class Camiseta:
+    # Definimos el constructor
+    def __init__(self, talla, color, precio, marca):
+        self.talla = talla
+        self.color = color
+        self.precio = precio
+        self.marca = marca
+        self.rebajada = False
+
+    def aplicarDescuento(self, porcentaje):
+        self.precio = self.precio - self.precio * porcentaje/100
+        if porcentaje < 100:
+            self.rebajada = True
+        
+
+    def infoProducto(self):
+        info = f'Descripcion de la camiseta\nMarca: {self.marca}\nPrecio: {self.precio}\nTalla: {self.talla}\nColor: {self.color}\n'
+        if self.rebajada:
+            info += 'ESTE PRODUCTO ESTA REBAJADO.'
+        return info
+
+
+# Creando dos objetos de la clase camiseta.
+camisetaNike = Camiseta('L', 'Azul', 20.00, 'Nike')
+camisetaPuma = Camiseta('XL', 'Roja', 30.00, 'Puma')
+
+
+print(camisetaNike.color)
+print(camisetaNike.precio)
+
+print('Precio de camiseta Puma sin descuento: ', camisetaPuma.precio, camisetaPuma.infoProducto())
+camisetaPuma.aplicarDescuento(50)
+print('Precio de camiseta Puma con descuento: ', camisetaPuma.precio, camisetaPuma.infoProducto())
+~~~
+
+## **Herencia**
+## **Encapsulamiento**
+## **Polimorfismo**
+
+# CONCEPTOS AVANZADOS
+## **Manejo de Excepciones**
+## **Funciones Lambda**
+## **Funciones Map y Filter**
+## **Modulos y Paquetes**
+## **Interfaces Graficas**
+## **Decoradores**
+
+# MANEJO DE BASES DE DATOS
+## **SQLite**
