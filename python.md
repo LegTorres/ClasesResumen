@@ -1337,7 +1337,108 @@ camisetaPuma.aplicarDescuento(50)
 print('Precio de camiseta Puma con descuento: ', camisetaPuma.precio, camisetaPuma.infoProducto())
 ~~~
 
+En python se pueden usar clases anidadas, conocidas como clases internas o **Inner Class**, por su termino en ingles, y esta consiste en declarar una clase en el cuerpo de otra clase. Si un objeto se crea utilizando una clase, se puede usar el objeto dentro de la clase raiz.
+
+Una clase puede tener más de una clase interna, pero en general se evitan las clases internas.
+Al usar clases internas, puedes hacer que tu código sea aún más orientado a objetos. Un solo objeto puede contener varios sub-objetos. Podemos usarlos para agregar más estructura a nuestros programas.
+~~~py
+class Humano:
+
+    def __init__(self):
+        self.nombre = 'Ivan'
+        self.cabeza = self.crearCabeza()
+    def crearCabeza(self):
+        return Humano.Cabeza(self)
+
+    class Cabeza:
+
+        def __init__(self, humano):
+            self.humano = humano
+        def hablar(self):
+            return 'talking...', self.humano.nombre
+ 
+ 
+ivan = Humano() #Instanciamos
+ivan.nombre
+#'Ivan'
+
+ivan.cabeza.hablar()
+#('hablando...', 'Ivan')
+~~~
+
 ## **Herencia**
+La herencia es un mecanismo o funcionalidad que nos permite que una clase reciba las caracteristicas de otra clase ademas de tener los suyos propios.
+
+La nomenclatura de la herencia es la siguiente:
+- **Superclase**:  
+Es la clase padre, de la cual se heredan las caracteristicas. Suele ser mas general y sirve de base para otras clases.
+- **Subclase**:  
+Es la clase hijo. Estas es la que recibe la herencia y amplia los metodos y atributos de la superclase con los suyos propios. Suele ser una clase mas concreta o especifica.
+
+Existen dos diferentes tipos de herencia. Entre ellos estan:
+- **Herencia Simple**:  
+Es la forma mas basica de herencia que existe, y consiste en que una clase hereda de una superclase.
+- **Herencia Jerarquica**:  
+Se produce cuando multiples subclases heredan de una unica superclase.
+- **Herencia Multiple**:  
+Es cuando una subclase hereda de dos o mas superclases al mismo tiempo.
+- **Herencia Multinivel**:  
+Es cuando una subclase hereda de una superclase, a su vez, esta superclase hereda de otra superclase.
+
+Para crear una subclase debemos escribir el nombre de la superclase entre parentesis detras del nombre de la clase hija. El metodo init de la subclase debe hacer referencia al constructor de la superclase por medio del metodo `super().__init__(propiedades, ...)`(no debe incluir la palabra `self`), y luego de esto, lo ampliamos con sus propios metodos. Por ejemplo:
+
+~~~py
+class Persona:
+    def __init__(self, nombre, edad, DNI):
+        self.nombre = nombre
+        self.edad = edad
+        self.DNI = DNI
+
+    
+    def presentarse(self):
+        print(f"Hola! mi nombre es {self.nombre}, y tengo {self.edad}.")
+
+
+class Trabajador(Persona):
+    def __init__(self, nombre, edad, DNI, sueldo, cargo, empresa):
+        super().__init__(nombre, edad, DNI)
+        self.sueldo = sueldo
+        self.cargo = cargo
+        self.empresa = empresa
+
+
+    def calcularSueldoAnual(self):
+        return 12 * self.sueldo + 2000
+
+
+class Estudiante(Persona):
+    def __init__(self, nombre, edad, DNI, universidad, curso, asignaturas):
+        super().__init__(nombre, edad, DNI)
+        self.universidad = universidad
+        self.curso = curso
+        self.asignaturas = asignaturas
+
+
+    def describirse(self):
+        print(f"Hola, soy {self.nombre}. Tengo {self.edad} y estudio en la universidad {self.universidad}. Estoy en el curso de {self.curso}")
+
+
+#=============================================#
+##########  Instanciando las clases  ##########
+#=============================================#
+
+trabajador = Trabajador('Fulano', 33, '765432-1', 2000, 'Administrador', 'Ikea')
+trabajador.presentarse()
+print(trabajador.calcularSueldoAnual())
+
+estudiante = Estudiante("Sutano", 25, 123456-7, "Universidad Nacional", "Programacion", ['Programacion', 'Matematica', 'Ciencias Naturales'])
+estudiante.describirse()
+print(estudiante.asignaturas)
+~~~
+
+> NOTA: Para que una subclase herede de multiples superclases basta con colocar entre parentesis todas las superclases separadas por comas.
+
+
 ## **Encapsulamiento**
 ## **Polimorfismo**
 
