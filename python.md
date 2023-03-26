@@ -1779,8 +1779,269 @@ while True:
 ~~~
 
 ## **Funciones Lambda**
+Las expresiones lambda son funciones anonimas, que y se usan idealmente cuando necesitamos hacer algo simple y estamos mas interesados en hacer el trabajo rapidamente en lugar de nombrar formalmente la funcion. Algunas de las caracteristicas de las funciones lambda son que permiten multiples argumentos, y solo pueden tener una expresion (una linea de codigo).  
+
+La estructura basica de una funcion lambda es: `lambda arg1, arg2 : expresion`.
+
+En el siguiente ejemplo creamos tres funciones lambda llamadas **suma**, **saludar** y **maximo**, y en las dos ultimas vemos que podemos llamar funciones dentro ed la funcion lambda.
+
+Ejemplo:
+
+~~~py
+# Creando una funcion lambda llamada suma.
+suma = lambda a, b : a + b
+print(suma(5,5))
+print(suma(3,2))
+
+
+# Llamando a otras funciones dentro de una funcion lambda.
+saludar = lambda nombre: print(f"Hola {nombre}!!")
+saludar("Sutano")
+
+maximo = lambda a, b, c: f"El maximo entre {a}, {b}, y {c} es: {max(a, b, c)}"
+print(maximo(3, 4, 5))
+print(maximo(10, 99, -25))
+~~~
+
+Tambien podemos definir funciones lambda dentro de funciones convencionales. Su funcionamiento es un poco curioso, ya que diferentes argumentos seran pasados en diferentes momentos del llamado a estas funciones. En el siguiente ejemplo definimos dos funciones convencionales que reciben un parametro y nos retornan una funcion lambda cada uno. Esta funcion lambda recibe un parametro que no recibe al momento de definir la funcion convencional, sino que lo reciben al momento de llamar a las funcion  que definiremos a partir de la funcion lambda retornada por la funcion convencional.
+
+Veamos:
+
+~~~py
+# Definiendo la funcion convencional que nos retornara una funcion lambda.
+# Y definiendo uno de los argumentos de la funcion.
+def ponerPrefijo(prefijo):
+    return lambda nombre: f"{prefijo} {nombre}"
+
+
+# Definiendo funciones a partir de la funcion convencional.
+# El argumento 'prefijo' lo pasamos como argumento de la funcion 'ponerPrefijo()'
+# Con esto, la expresion de la funcion lambda tiene uno de los valores 
+# con los que trabajar, quedando pendiente el argumento 'nombre' de la funcion lambda
+addMr = ponerPrefijo("Mr")
+addSr = ponerPrefijo("Sr")
+addMiss = ponerPrefijo("Miss")
+
+# Llamamos a la funciones creadas a partir de 'ponerPrefijo()'.
+# Y es ahora cuando pasamos el argumento 'nombre' de la funcion lambda.
+# De esta manera hemos pasado los dos argumentos con los que 
+# trabaja la expresion de la funcion lambda.
+print(addMr("Juan"))
+print(addSr("Julian"))
+print(addMiss("Nerea"))
+
+#====================================================================
+# OTRO EJEMPLO DE FUNCION LAMBDA DENTRO DE UNA FUNCION CONVENCIONAL #
+#====================================================================
+def elevarA(exponente):
+    return lambda base: base ** exponente
+
+
+# Creando funciones a partir de la funcion lambda que retornara la funcion convencional 
+# y fijando el argumento exponente
+elevarCuadrado = elevarA(2)
+elevarCubo = elevarA(3)
+
+# Asignando el numero de base e imprimiendo el resultado de la elevacion en pantalla.
+print(elevarCuadrado(3))
+print(elevarCubo(2))
+~~~
+
+Es importante notar que las funciones `addMr()`, `addSr()`, y `addMiss()` se comportan como si fueran variables, y que el 'valor' que les es asignado al momento de crearlas es la funcion lambda que retorna la funcion convencional `ponerPrefijo()`, ya con el argumento `prefijo` establecido. por lo cual, cuando llamemos a las funciones mencionadas, el argumento que les estaremos pasando sera el correspondiente al argumento nombre de la funcion lambda.
+
+> NOTA: En Python es comun utilizar funciones como si fueran objetos o variables, como podemos ver en el caso de las funciones `lambda` o la siguiente funcion que veremos, `filter`. por eso podemos pasarlos como parametros a otras funciones.
+
 ## **Funciones Map y Filter**
+Las funciones `map()` y `filter()` son funciones que nos permiten trabajar con objetos iterables(listas, tuplas o strings). Estas funciones vienen incorporadas por defecto con Python.
+
+### ***Funcion Filter***
+La funcion `filter(function, iterable)` devuelve un **iterador** con los valores del **iterable** que cumplan con **function**. Filter ejecuta la funcion con cada uno de los elementos que contiene el iterable, por lo que seran comprobados los elementos uno a uno y los que cumplan con la funcion del primer parametro seran seleccionados y pasados al iterador. De esa manera, no sera necesario hacer un bucle que vaya recorriendo la lista para ir pasando los elementos al iterador.
+
+En el siguiente ejemplo, se puede usar para comprobar emails validos de una lista. 
+
+~~~py
+emails = [
+    'fulano@hotmail.es',
+    'sutano@gmail.com',
+    'frutas',
+    'wikipedia.com'
+]
+
+#=========================#
+# Haciendo uso de Listas: #
+#=========================#
+listaEmailsValidos = []
+
+print('Imprimiendo emails validos usando listas:')
+for email in emails:
+    if '@' in email:
+        print(f"el email {email} es valido.")
+        listaEmailsValidos.append(email)
+    else:
+        print(f"el email {email} es invalido.")
+
+
+# ==============================#
+# Utulizando la funcion filter: #
+# ==============================#
+def evaluarEmail(email):
+    return '@' in email
+    
+
+iteradorEmailsValidos = filter(evaluarEmail, emails)  
+
+print('\nImprimiendo emails validos usando la funcion filter:')
+print(next(iteradorEmailsValidos))
+print(next(iteradorEmailsValidos))
+
+~~~
+
+> NOTA: La linea `return '@' in email` es una expresion condicional, por lo que devolvera `True` o `False` dependiendo si se encuentra el caracter `@` o no. Con esa linea evitamos usar el **if-else**, ya que seria redundante.
+
+Tanto la funcion filter como map devuelven un **iterador**, y ***no se puede acceder a los elementos que contiene como los de una lista***. Si preferimos trabajar con listas es posible convertir el iterador en una con la funcion `list(iterador)`. Para acceder a ellos es necesario hacerlo a traves de funciones especificas, como por ejemplo:
+- `next(iterador)`:  
+Devuelve un elemento del iterador cada vez que se llama. Si se llama mas veces que el numero de elementos que contiene el iteradornos dara un error de **StopIteration**.
+
+Podemos utilizar funciones lambda como parametro de la funcion filter. Volviendo al ejemplo anterior la forma de aplicarla seria lo siguiente:
+
+~~~py
+emails = [
+    'fulano@hotmail.es',
+    'sutano@gmail.com',
+    'frutas',
+    'wikipedia.com',
+]
+
+emailsValidos = list(filter(lambda email: '@' in email, emails))
+print(emailsValidos)
+
+~~~
+
+### ***Funcion Map***
+La definicion de map es muy similar a la definicion de filter (`map(function, iterable)`), pero a diferencia de la funcion filter, map **ejecuta la funcion usando como parametro cada elemento del iterable**. Por lo tanto **no se esta evaluando una condicion, simplemente se esta pasando los elementos del iterable por la funcion** y ya esta, no verifica si el retorno de la funcion es `True` o `False`.
+
+Por ejemplo, en el siguiente programa contamos el numero de caracteres que conforman cada elemento de la tupla `palabras`:
+
+~~~py
+palabras = (
+    'Hola',
+    'que',
+    'tal',
+    'como',
+    'estas',
+    '?'
+)
+
+longitudes = list(map(lambda palabra: len(palabra), palabras))
+print(longitudes)
+~~~
+
+Podemos pasar cuantos iterables deseemos siempre y cuando coincidan con el numero de argumentos que reciba la funcion que utilicemos de parametro para map. 
+
+Por ejemplo, pasamos dos listas como iterables de map que son recibidos por la funcion lambda que necesita dos argumento. Cada elemento de la lista `eje_x` y `eje_xx` seran asignados a los argumentos `x` y `y` respectivamente.
+
+~~~py
+import math
+
+eje_x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+eje_xx = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+
+eje_y = list(map(lambda x, y: round(math.cos(x) + math.exp(y), 2), eje_x, eje_xx))
+
+print(eje_y)
+~~~
+
+
 ## **Modulos y Paquetes**
+### ***Modulos***
+Los modulos son archivos de Python (Pueden ser de Cpython o de C). Estos archivos pueden contener funciones, clases y variables que despues pueden ser importadas a nuestros archivos para hacer uso de estas sin tener que volver a escribir su codigo.
+
+Para crear un modulo creamos un archivo Python a parte donde esscribimos el codigo de nuestra eleccion. En nuestro siguiente ejemplo crearemos un modulo llamado **calcularArea.py**
+
+~~~py
+# Modulo calcularArea.py
+
+PI = 3.1415
+
+def areaCirculo(radio):
+    return PI * radio ** 2
+
+
+def areaTriangulo(base, altura):
+    return base * altura / 2
+
+
+def areaCuadrado(lado):
+    return lado * lado
+~~~
+
+Y desde nuestro archivo principal importamos el modulo de la siguiente manera:
+
+~~~py
+# Archivo main.py
+
+import calcularArea
+from calcularArea import areaCuadrado, areaTriangulo
+
+print(calcularArea.PI)
+print(calcularArea.areaCirculo(5))
+print(areaCuadrado(3))
+~~~
+
+> NOTA: Si importamos el modulo completo (`import calcularArea`) necesitamos escribir el nombre del modulo cada vez que deseemos usar una de sus funciones (por ejemplo: `print(calcularArea.areaCirculo(5))`). En cambio, si importamos unicamente la funcion que necesitamos (con la linea `from calccularArea import areaCuadrado` o importarlas todas con la linea `from calcularArea import *`), basta con escribir la funcion como si de una funcion interna se tratase.
+
+### ***Paquetes***
+Los paquetes son conjuntos de modulos, relacionados entre si, y que se encuentran en un mismo directorio.
+
+Para crear un paquete necesitamos segior los siguientes pasos:  
+- Crear una carpeta y asignarle el nombre de nuestro paquete.
+- Dentro de el directorio creado colocaremos los archivos que seran los modulos de dicho paquete. 
+- Crear un archivo de Python llamado `__init__.py` que se ejecutara cuando carguemos un paquete. Normalmente se deja vacio. 
+
+> NOTA: Desde python 3.3 ya no es un requisito crear el archivo `__init__.py`, pero es una buena practica hacerlo.
+
+Hay diferentes maneras de importar un paquete o modulo, ademas de la manera vista en el ejemplo anterior podemos hacerlo como en el siguiente ejemplo en el que establecemos que: 
+
+Desde el modulo `calcularPermietro` del paquete `geometria` importamos la clase `CalcularPerimetros` renombrando la clase como (con la palabra reservada `as`) `CP`. Con esto podemos trabajar con un nombre de la clase mas facil de manejar.
+
+Por ejemplo:
+
+~~~py
+# Modulo calcularPerimetro.py
+
+import math
+
+class CalculaPerimetros:
+    def __init__(self):
+        pass
+
+
+    def perimetroCuadrado(self, lado):
+        return lado * 4
+    
+
+    def perimetroCirculo(self, radio):
+        return math.pi * radio * 2
+    
+    
+~~~
+
+~~~py
+# Archivo main.py
+
+from geometria.calcularPerimetro import CalculaPerimetros as CP
+import geometria.calcularArea
+
+
+cp = CP()
+print('Imprimiendo Perimetro de circulo', cp.perimetroCirculo(2))
+
+print('Imprimiendo Area de circulo', geometria.calcularArea.areaCirculo(3))
+
+~~~
+
+> NOTA: Podemos importar modulos o paquetes dentro de otros modulos sin ningun problema.
+
 ## **Interfaces Graficas**
 ## **Decoradores**
 
