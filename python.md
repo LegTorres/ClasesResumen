@@ -34,6 +34,7 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Herencia](#herencia)
 - [Encapsulamiento](#encapsulamiento)
 - [Polimorfismo](#polimorfismo)
+- [Abstraccion](#abstraccion)
 
 **Conceptos Avanzados**
 - [Manejo de Excepciones](#manejo-de-excepciones)
@@ -1004,7 +1005,8 @@ Algunas funciones útiles para manipular cadenas de texto son las siguientes:
 |`.replace(x, y)` | Reemplaza **x** por **y**.                                                    |
 |`len(x)`         | Devuelve la longitud de x.                                                    |
 |`.split(sep='')` | Divide una cadena en una lista de palabras separandolas por el valor de sep.  |
-|`x.join(a)`      | Retorna un string de todos los elementos de un iterable, separados por **x**.|
+|`x.join(a)`      | Retorna un string de todos los elementos de un iterable, separados por **x**. |
+|`a.isnumeric()`  | Retorna True si **a** el contenido de un String es numerico                   |
 
 > NOTA sobre `.split(sep='')`: Si no se pasa el argumento `sep`, o el valor de este es `None` la cadena se dividira en cada una de sus palabras separadas por espacios, y estos se eliminaran, ademas de cualquier caracter que se imprima en blanco como `\n, \t` o `\r` Ademas, si se especifica el argumento sep, los delimitadores que aparezcan juntos no se agrupan. En su lugar, se crea como token una **cadena vacía** `''`.  
 Ademas podemos utilizar el argumento `maxsplit` para establecer un limite a el numero de divisiones a realizar.
@@ -1440,10 +1442,342 @@ print(estudiante.asignaturas)
 
 
 ## **Encapsulamiento**
+En Python, todos los metodos y atributos son publicos, por lo que el encapsulamiento realmente no existe. Aun asi, hay convenciones para tratar de indicar a los desarrolladores que dichos atributos o metodos se deben tratar como protegidos o privados. Las convenciones son las siguientes:
+- `_atributoOMetodo`: 
+Un guion al principio del nombre nos indica de que el atributo o metodo debe ser tratado como protegido.
+- `__atributoOMetodo`:  
+Un doble gion al principio del nombre nos indica de que el atributo o metodo debe ser tratado como privado.
+
+El encapsulamiento permite regular el acceso a los metodos y atributos de una clase, por lo que en cierta manera enmascara la complegidad de una clase. 
+
+Para los metodos y los atributos tenemos los siguientes **modificadores de acceso**:
+- **Publicos**:  
+Son accesibles desde cualquier punto del codigo, tanto dentro como fuera de la clase, subclase, etc.
+- **Protegidos**:  
+Son accesibles desde la misma clase, las subclases y clases dentro del mismo paquete.
+- **Privados**:  
+Son accesibles unicamente dentro de la misma clase.
+
+Las utilidades del encapsulamiento son que nos permiten ocultar metodos y atributos fuera de la propia clase. Podemos regular la modificacion de los atributos(privados) evitando que se accedan a ellos directamente. Crearemos metodos(publicos) para modificar los atributos de un objeto, y enmascara la complejidad de algunos metodos haciendolos privados y utilizarlos desde metodos publicos.
+
+~~~py
+class Circulo:
+    def __init__(self, radio):
+        self.__radio = radio
+        self.__pi = 3.1415
+
+    
+    def calcularPerimetro(self):
+        return 2 * self.__pi * self.__radio
+
+
+    def calcularArea(self):
+        return self.__pi * self.__radio ** 2
+    
+    # Creando un metodo publico para acceder a la propiedad privada __pi.
+    def getPi(self):
+        return self.__pi
+
+
+    # Creando un metodo publico para actualizar el valor de la propiedad privada __radio
+    def setRadio(self, nuevoValor):
+        if type(nuevoValor) == int or type(nuevoValor) == float:
+            if nuevoValor > 0:
+                self.__radio = nuevoValor
+                print(f'El radio se ha modificado. Su nuevo valor es: {nuevoValor}')
+            else:
+                print('El radio no puede ser negativo.')
+        else:
+            print('El radio tiene que ser un valor de tipo entero o float positivo')
+
+
+c1 = Circulo(2.5)
+print(c1.calcularArea())
+print(c1.calcularPerimetro())
+print(f'La constante  PI tiene el valor de: {c1.getPi()}')
+
+c1.setRadio(34)
+c1.setRadio(-23)
+c1.setRadio("Hola, que tal")
+~~~
+
+En el caso anterior, al querer llamar a la propiedad `__pi` de la clase `Circulo` nos da un error(`AttributeError`), diciendonos que el atributo no existe, pero esto no es porque Python soporte oficialmente el encapsulamiento, sino porque al escribir el nombre de un atributo o metodo con dos guiones bajos al principio python cambia la nomenclatura de el atributo o metodo. Por lo tanto: `__nombreDelAtributoMetodo` Equivale a: `_NombreDeLaClase__nombreDelAtributoMetodo`. Asi que, en el caso anterior, si quisieramos acceder a un metodo o atributo privado de la clase `Circulo` a traves del objeto `c1`, podriamos hacerlo usando la nomenclatura `c1._Circulo__pi`.
+Python hace lo anterior para evitar que nombres de metodos o atributos de clases distintas coliciones.
+
+Crear metodos publicos para acceder o modificar propiedades privadas es una manera de evitar el acceso incorrecto a los metodos. De esta forma podemos validar  que no se usen valores que no correspondan con los esperados.
+
+
 ## **Polimorfismo**
+El polimorfismo es una herramienta que nos permite redefinir metodos que se heredan de una clase padre. De este modo, si tenemos un metodo de una superclases de la cual heredan una o mas subclases, en cada una de estas subclases, bajo el mismo nombre, podremos modificar o definir de nuevo el codigo que se ejecuta en esos metodos.
+
+Ejemplo de polimorfismo:
+
+~~~py
+class Empleado:
+    def __init__(self, nombre, sueldoMensual):
+        self.nombre = nombre
+        self.sueldoMensual = sueldoMensual
+
+
+    def calcularSueldoAnual(self):
+        sueldo = 12 * self.sueldoMensual * (1 + 1/100)
+        print(f'El sueldo anual de {self.nombre}, empleado Normal es de: ${sueldo}')
+
+
+class Contable(Empleado):
+    def __init__(self, nombre, sueldoMensual):
+        super().__init__(nombre, sueldoMensual)
+
+
+    # Haciendo uso del polimorfismo, aumentando el bono a un 4%.
+    def calcularSueldoAnual(self):
+        sueldo = 12 * self.sueldoMensual * (1 + 4/100)
+        print(f'El sueldo anual de {self.nombre}, empleado Contable es de: ${sueldo}')
+
+
+class Publicista(Empleado):
+    def __init__(self, nombre, sueldoMensual):
+        super().__init__(nombre, sueldoMensual)
+
+
+    def calcularSueldoAnual(self):
+        sueldo = 12 * self.sueldoMensual * (1 + 5/100)
+        print(f'El sueldo anual de {self.nombre}, Publicista es de: ${sueldo}')
+
+
+class Becario(Empleado):
+    def __init__(self, nombre, sueldoMensual):
+        super().__init__(nombre, sueldoMensual)
+
+
+    def calcularSueldoAnual(self):
+        sueldo = 12 * self.sueldoMensual
+        print(f'El sueldo anual de {self.nombre}, Becario es de: ${sueldo}')
+
+
+# Creando lista de objetos.
+empleados = [
+    Empleado('Juan', 1000),
+    Contable('Angela', 1100),
+    Publicista('Ryan', 1200),
+    Becario('Pepito', 750)
+]
+
+for empleado in empleados:
+    empleado.calcularSueldoAnual()
+
+~~~
+
+En el ejemplo anterior hacemos uso del polimorfismo, y gracias a el podemos llamar al metodo `calcularSueldoAnual()`, y este se comportara de manera diferente dependiendo de a que clase pertenezca cada uno de los objetos creados en la lista `empleados`.
+
+> NOTA: De hecho, desde el momento en que redefinimos el constructor de una clase que hereda de otra estamos haciendo uso del polimorfismo
+
+
+## **Abstraccion**
+La abstraccion es un mecanismo que nos permite crear **clases abstractas**. Estas son, clases que nunca instanciaremos de manera directa. Estas clases nos sirven de estructura principal para otras subclases que van a heredar de esta clase abstracta.  
+Las clases abstractas deben poseer por lo menos un **metodo abstracto**. Estos metodos se sobreescribiran obligatoriamente en las subclases que hereden de nuestra clase abstracta.
+
+Para crear clases abstractas es necesario seguir los siguientes pasos.
+1. Importar el metodo `abstractmethod` de la clase `ABC` o `ABCMeta`del modulo `abc`.
+2. Hacer que las clases abstractas hereden de la clase `ABC`, o `metaclass=ABCMeta`.  
+3. Definir los metodos como abstractos usamos el decorador `@abstractmethod` encima de la declaracion de la funcion. 
+4. Opcionalmente podemos llamar los metodos de la clase abstracta al momento de definir el metodo de la subclase. En el ejemplo lo haremos con la linea `super().getStatus()` dentro de la funcion con el mismo nombre.
+
+~~~py
+from abc import ABC, abstractmethod
+
+class Personaje(ABC):
+    @abstractmethod
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.nivel = 0
+        self.vida = 100
+        self.inventario = []
+
+
+    @abstractmethod
+    def atacar(self, objetivo):
+        pass
+
+
+    @abstractmethod
+    def getStatus(self):
+        print(f"Nombre: {self.nombre}. Nivel: {self.nivel}")
+
+
+    def subirDeNivel(self):
+        self.nivel +=1
+
+
+    def verInventario(self):
+        print(f"Inventario de {self.nombre}")
+        for objeto in self.inventario:
+            print(objeto)
+
+
+class Mago(Personaje):
+    def __init__(self, nombre):
+        super().__init__(nombre)
+        self.vida = 120
+        self.inteligencia = 95
+        self.inventario = ["Pocion de Mana", "Grimorio"]
+
+
+    def getStatus(self):
+        print("Clase Mago")
+        # Extendemos el metodo getStatus.
+        super().getStatus()
+
+
+    def atacar(self, objetivo):
+        objetivo.vida -= self.inteligencia * 0.6
+        print(f"La vida actual del objetivo es: {objetivo.vida}")
+
+
+    def saludar(self):
+        print('Hola que tal! Soy un Mago')
+
+
+class Guerero(Personaje):
+    def __init__(self, nombre):
+        super().__init__(nombre)
+        self.vida = 200
+        self.fuerza = 75
+        self.inventario = ["Posion de vida", "Escudo", "Espada"]
+
+
+    def getStatus(self):
+        print("Clase Guerrero")
+        super().getStatus()
+
+
+    def atacar(self, objetivo):
+        objetivo.vida -= self.fuerza * 0.8
+        print(f"El objetivo se ha quedado con {objetivo.vida} puntos de vida.")
+
+
+guerrero = Guerero("Kaladin")
+mago = Mago("Yuno")
+
+guerrero.getStatus()
+mago.getStatus()
+
+guerrero.verInventario()
+mago.verInventario()
+
+mago.atacar(guerrero)
+guerrero.atacar(mago)
+~~~
+
+> Un decorador basicamente "envuelve" y modifica el comportamiento de la funcion que esta decorando. En el ejemplo anterior estamos convirtiendo los metodos `__init__()`, `getStatus()` y `atacar` de la clase personaje en metodod abstractod, ya que no instaciaremos la clase Personaje.
+
+> NOTA: Podemos definir metodos que no hayamos definido como abstractos en las superclase o en las subclases sin problemas, como el metodo `saludar()` en el ejemplo anterior.
+
 
 # CONCEPTOS AVANZADOS
+
 ## **Manejo de Excepciones**
+Las excepciones son errores que ocurren durante la ejecucion del programa. Estos errores surgen a pesar de que la sintaxis sea correcta. Estos errores pueden ser, por ejemplo, intentar acceder a una posicion de una lista que no existe, intentar abrir un fichero que no se ha creado o intentar convertir una cadena de texto en un entero.
+
+Manejar las excepciones en cualquier lenguaje os permite que el programa se siga ejecutando a pesar de que ocurran errores.
+
+Las excepciones se manejan con los bloques `try:` y `except`. En el primero colocamos el codigo que es suceptible a que nos produzca un error, mientras que el segundo capturamos el tipo de excepcion que esperamos se pueda producir y establecemos lo que queremos que el programa realice cuando el error se haya producido. 
+
+Algunos tipos de excepciones que se mas comunmente son:
+
+- ` ZeroDivisionError`:  
+Cuando intentamos dividir por cero.
+- `IndexError`:  
+Cuando se intenta acceder a un indice en una lista que no existe.
+- `ValueError`:  
+Cuando intentamos manejar un tipo de dato como si fuera otro. Por ejemplo un string como entero.
+- `Exception`:  
+Esta excepcion captura cualquier tipo de excepcion, sin tener la necesidad de conocer su clase especifica.
+
+Ejemplo:
+
+~~~py
+def division(a, b):
+    try:
+        resultado = a/b
+        print(resultado)
+
+    except ZeroDivisionError:
+        print("No se puede dividir por cero")
+
+
+division(5,0)
+
+print('Programa finalizado.')
+~~~
+
+Podemos colocar multiples bloques except para capturar diferentes tipos de excepciones y que el programa se comporte de manera distinda dependiendo de el error capturado.  
+Tambien es posible *renombrar* excepciones para imprimir un mensaje descriptivo del tipo de error utilizando la palabra reservada `as` seguido del nombre que queramos asignarle.
+
+~~~py
+def elegirFrutas(listaFrutas):
+    try:
+        print(listaFrutas)
+        index = int(input('Ingresa el numero de la fruta que deseas: '))
+        print(f'Tu fruta favorita es: {listaFrutas[index]}')
+
+    except IndexError:
+        print(f'Indice incorrecto, debe estar entre 0 y {len(listaFrutas) - 1}')
+
+    except ValueError:
+        print('Tienes que ingresar un numero entero')
+
+    except Exception as errorRandom:
+        print('Se ha producido un error: ', errorRandom)
+
+
+frutas = [
+    '0-Platano',
+    '1-Manzana',
+    '2-Pomelo',
+    '3-Melocoton'
+]
+
+elegirFrutas(frutas)
+
+~~~
+
+> NOTA: Para poder obtener mas informacion sobre los errores capturados con la excepcion `Exception`, podemos hacer uso de el metodo `logging.exception("Mensaje personalizado")` dentro del bloque `except`. Este metodo nos brinda informacion de la traza de errores en la pila de errores. Para eso debemos importar el modulo logging con la linea `import logging`
+
+Podemos combinar las excepciones con las sentencias `raise`, `else` y `finally` para tener un mayor control en el manejo de errores. Las palabras anteriores hacen lo siguiente:
+- `raise`:  
+Dispara una excepcion especifica de manera voluntaria. Su sintaxis es `raise TipoDeError("Mensaje personalizado")`.
+- `else`:  
+El bloque **else** se ejecutara si el bloque **try** se ejecuta sin producir ningun error. En el siguiente ejemplo lo utilizamos para romper el ciclo while despues de haberse ejecutado nuestro codigo de manera satisfactoria.
+- `finally`:  
+El codigo escrito en esta seccion se ejecutara siempre, sin importar si se ha producido un error o no
+
+~~~py
+while True:
+    try:
+        total = 0
+        sumandos = input("Pasa numeros separados por espacios: ")
+        sumandos = sumandos.split()
+
+        for num in sumandos:
+            if num.isnumeric():
+                total += float(num)
+            else:
+                raise ValueError("El valor no es un numero.")
+            
+    except ValueError:
+        print('Los datos son incorrectos')
+        print('Vuelve a introducir los numeros por favor: ')
+
+    else:
+        print(f'El valor de la suma es: {total}')
+        break
+
+    finally:
+        print('Ha terminado la iteracion.')
+
+~~~
+
 ## **Funciones Lambda**
 ## **Funciones Map y Filter**
 ## **Modulos y Paquetes**
