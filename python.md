@@ -41,7 +41,7 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Funciones Lambda](#funciones-lambda)
 - [Funciones Map y Filter](#funciones-map-y-filter)
 - [Modulos y Paquetes](#modulos-y-paquetes)
-- [Interfaces Graficas](#interfaces-graficas)
+- [Interfaces Graficas con Tkinter](#interfaces-graficas-con-tkinter)
 - [Decoradores](#decoradores)
 
 **Manejo de Bases de Datos**
@@ -2042,7 +2042,106 @@ print('Imprimiendo Area de circulo', geometria.calcularArea.areaCirculo(3))
 
 > NOTA: Podemos importar modulos o paquetes dentro de otros modulos sin ningun problema.
 
-## **Interfaces Graficas**
+## **Interfaces Graficas con Tkinter**
+Tkinter es un binding de la biblioteca gráfica Tcl/Tk para el lenguaje de programación Python. Se considera un estándar de interfaz gráfica de usuario para Python y está incluido por defecto con la instalación para Microsoft Windows. Para instalarlo en Ubuntu podemos usar el comando `sudo apt install python3-tkinter` y para Manjaro Linux con el comando `sudo pacman -S tk`.
+
+Tkinter funciona mediante **widgets**, que son elementos predefinidos que podemos ir incrustando en nuestra aplicacion, como pueden ser un boton, un input de texto, o incluso, la ventana principal de la aplicacion.
+
+Para crear una aplicacion con interfaz grafica como en el sigiente ejemplo debemos seguir los siguientes pasos:
+- **importar el modulo `tkinter`**. Podemos renombrarlo con la palabra reservada `as` para colocarle un nombre mas manejable.
+- **Instanciar un objeto de la clase `Tk()`** del modulo tkinter.
+- **Creamos los objetos de tipo `tk.StringVar(app)`**  
+Para poder trabajar con variables y usarlas en nuestra aplicacion ya sea asignandoles valor u obteniendo el contenido de algun widget por medio de los metodos `.set()` y `.get()` respectivamente.
+- **Definimos las dimensiones por defecto de nuestra ventana** por medio del metodo app.geometry("600x300").
+- **Establecemos un color de fondo** a traves del metodo `.configure(background="black")`.
+- **Asignamos un titulo a nuestra ventana** con el metodo `tk.Wm.wm_title(app, "Mi interfaz grafica.")` de la clase Wm del modulo tkinter. Este recibe como parametro la ventana a la cual le asignaremos el titulo y el titulo en si.
+- **Definimos las funciones** para interactuar con nuestra aplicacion.
+- **Creamos los widgets** que contendra nuestra aplicacion.
+- **Llamar al metodo `.mainloop()` de la clase Tk**, que se encarga de ir refrescando nuestra aplicacion para ir actualizando constantemente el estado de nuestra aplicacion, como por ejemplo, si hemos hecho click a algun boton o si debemos modificar algun widget.
+
+Cada widget hace referencia a una clase de el modulo tk, y como primer parametro le agregamos el objeto de la ventana donde queremos anclarlo, y seguido, podremos agregar todos los demas parametros con sus respectivos valores para darle un estilo y fncionalidad a nuestra aplicacion. Dichos parametros deben ir separados por comas. Estos pueden ser:  
+- `text`:  
+Asigna el texto de nuestro widget.
+- `font`:  
+Establece el tipo y tamaño de fuente en nuestro widget.
+- `bg`:  
+Establece el color de fondo de nuestro widget.
+- `fg`:  
+Establece el color de la fuente de nuestro widget.
+- `command`:  
+Asigna una funcion **como un objeto**  (debe escribirse sin los parentesis), no como ejecucion de la funcion. se puede utilizar una funcion lambda. En caso de que se quiera asignar la ejecucion de una funcion (como podria ser la sentencia `print("Hola mundo!")`) esta se ejecutara sin que hayamos interactuado con el widget.
+- `relief`:  
+Define el tipo de borde que poseera nuestro widget.
+- `justify`:  
+Establece el alineado (centrado, derecha o izquierda) del texto de nuestro widget
+- `textvariable`:  
+Hace referencia a un objeto de tipo **StringVar** que permite interactuar con el contenido de nuestros widgets ya sea recuperando su contenido o asignandoles algun valor por medio de los metodos `.set()` y `.get()`.
+
+Luego de haber definido los parametros de todo lo que contendra nuestro widget debemos llamar al metodo `pack()`. Este metodo lo que hace es enpaquetar nuestro widget y establecer en que direcciones (a lo alto y a lo ancho con el parametro `fill`) se rellenara el espacio disponible y si se expandira en el contenedor principal con el parametro `expand`.
+
+Ejemplod de un programa con interfaz grafica usando tkinter:
+
+~~~py
+import tkinter as tk
+
+app = tk.Tk()
+
+palabra = tk.StringVar(app)
+entrada = tk.StringVar(app)
+
+app.geometry("600x300")
+app.configure(background="black")
+tk.Wm.wm_title(app, "Mi interfaz grafica.")
+
+def saludar():
+    print(f"Hola que tal {entrada.get()}!")
+
+
+def cambiarPalabra():
+    palabra.set(f"Cambiando palabra a: {entrada.get()}")
+
+
+tk.Button(
+    app,
+    text="Click Me!",
+    font=("Courier", 14),
+    bg="#00a8e8",
+    fg="white",
+    command=cambiarPalabra,
+    relief="flat"
+).pack(
+    fill=tk.BOTH,
+    expand=True
+)
+
+tk.Label(
+    app,
+    text="Etiqueta",
+    fg="white",
+    bg="black",
+    justify="center",
+    textvariable=palabra
+).pack(
+    fill=tk.BOTH,
+    expand=True
+)
+
+tk.Entry(
+    app,
+    text="Etiqueta",
+    fg="white",
+    bg="black",
+    justify="center",
+    textvariable=entrada
+).pack(
+    fill=tk.BOTH,
+    expand=True
+)
+
+app.mainloop()
+
+~~~
+
 ## **Decoradores**
 
 # MANEJO DE BASES DE DATOS
