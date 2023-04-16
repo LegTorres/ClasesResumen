@@ -41,8 +41,10 @@ Administrado por Python Software Foundation, posee una licencia de código abier
 - [Funciones Lambda](#funciones-lambda)
 - [Funciones Map y Filter](#funciones-map-y-filter)
 - [Modulos y Paquetes](#modulos-y-paquetes)
-- [Interfaces Graficas con Tkinter](#interfaces-graficas-con-tkinter)
 - [Decoradores](#decoradores)
+
+**Interfaces Graficas**
+- [Uso de la Biblioteca Tkinter](#uso-de-la-biblioteca-tkinter)
 
 **Manejo de Bases de Datos**
 - [SQLite](#sqlite)
@@ -62,6 +64,12 @@ def run():
 if __name__ == '__main__':
     run()
 ~~~
+
+> NOTA: Esta estructura es importante respetarla ya que evita que, si por ejemplo, desde un archivo **B** importamos al archivo **A**, al ejecutar **B** este ejecute todo lo que contiene el archivo **A** entorpeciendo la funcionalidad de nuestro programa. De esa manera, solo importaremos las funciones de **A**
+desde **B** y el codigo de **A** solo lo ejecutaremos cuando le demos ejecutar a dicho archivo.  
+Por ejemplo, si tuvieramos la linea `print("Hola Mundo!")` en **A**, fuera del bloque `if __name__ == '__main__':`, esta linea se ejecutaria cuando hicieramos un `import a.py` desde **B**.
+
+> El nombre `__main__` hace referencia a el archivo que se esta ejecutado. Python lo renombra de esa manera.
 
 ## **Salida de Datos**
 Mostrar datos en pantalla es muy sencillo en python, y se hace con la funcion `print("Hola Mundo")`. Esta linea escribira un mensaje en pantalla agregandole un salto de linea al final de el texto.  
@@ -2042,7 +2050,137 @@ print('Imprimiendo Area de circulo', geometria.calcularArea.areaCirculo(3))
 
 > NOTA: Podemos importar modulos o paquetes dentro de otros modulos sin ningun problema.
 
-## **Interfaces Graficas con Tkinter**
+
+## **Decoradores**
+Los decoradores son elementos que sirvern para modificar el comportamiento de una funcion.
+
+En python las funciones son objetos, y por lo tanto:
+- Son instancias de tipo Objeto.
+- Podemos almacenarlas en una variable.
+- Podemos pasar una funcion como parametro de otra funcion
+- Una funcion puede retornar otra funcion.
+- Se pueden almacenar en estructuras de datos, como tablas, listas...
+
+En el siguiente ejemplo podemos ver una funcion retornando otra funcion.
+
+~~~py
+def funcionExterna(nombre):
+    def funcionEnvoltorio():
+        print('Empieza la funcion envoltorio')
+        print(nombre)
+        print('Final de la barra envoltorio\n')
+
+    
+    return funcionEnvoltorio
+
+
+instanciaFuncion = funcionExterna('Fulanito')
+instanciaFuncion()
+
+otraFuncion = funcionExterna('Sutanito')
+otraFuncion()
+
+~~~
+
+> Si devolvemos la funcion `funcionEnvoltorio` sin parentesis estamos retornando la funcion en si, como un objeto. En caso contrario estariamos devolviendo la ejecucion de la funcion.
+
+Ejemplo de funcion que reciba otra funcion como parametro:
+
+~~~py
+from datetime import datetime
+
+def fecha():
+    print(datetime.today().strftime("%d-%m-%Y"))
+
+
+def hora():
+    print(datetime.now().strftime("%H:%M:%S"))
+
+
+def funcionExterna(funcionInterna):
+    def funcionEnvoltorio():
+        print("\nEmpieza la funcion")
+        funcionInterna()
+        print("Fin de la funcion\n")
+    return funcionEnvoltorio
+
+
+mostrarHora = funcionExterna(hora)
+mostrarFecha = funcionExterna(fecha)
+
+mostrarHora()
+mostrarFecha()
+~~~
+
+
+La sintaxis de los decoradores consiste en escribir el nombre de la funcion a la que queremos modificar detras de signo de la arroba sobre la funcion cuyo codigo queremos incorporar a la funcion externa. 
+
+Por ejemplo:
+
+~~~py
+def funcionExterna(funcionInterna):
+    def funcionEnvoltorio():
+        print("\nEmpieza la funcion")
+        funcionInterna()
+        print("Fin de la funcion\n")
+    return funcionEnvoltorio
+
+
+@funcionExterna
+def saludar():
+    print("Hola a todos")
+
+
+@funcionExterna
+def despedirse():
+    print("Adios a todos")
+
+
+saludar()
+despedirse()
+~~~
+
+Podemos usar decoradores con funciones que reciban deferentes numeros de argumentos.
+
+~~~py
+def sumarNumeros(*args, **kwargs):
+    acumulador = 0
+    for num in args:
+        acumulador += num
+    return acumulador
+
+
+print(sumarNumeros(1,2,3,4,5,6,7,8,9,10))
+
+
+def operarConPares(operacion):
+    def wraper(*args, **kwargs):
+        soloPares = list(filter(lambda num: num % 2 == 0, args))
+        resultado = operacion(*soloPares, **kwargs)
+        print(f"El resultado de la operacion es: {resultado}")
+        return resultado
+    return wraper
+
+
+sumarPares = operarConPares(sumarNumeros)
+sumarPares(1,2,3,4,5,6)
+
+@operarConPares
+def multiplicar(*args, **kwargs):
+    acumulador = 1
+    for num in args:
+        acumulador *= num
+    if "max" in kwargs.keys():
+        return min(kwargs["max"], acumulador)
+    return acumulador
+
+
+multiplicar(1,2,3,4,5,6,7,8,9,10)
+multiplicar(1,2,3,4,5,6,7,8,9,10, max=500)
+~~~
+
+# INTERFACES GRAFICAS
+## **Uso de la Biblioteca Tkinter**
 Tkinter es un binding de la biblioteca gráfica Tcl/Tk para el lenguaje de programación Python. Se considera un estándar de interfaz gráfica de usuario para Python y está incluido por defecto con la instalación para Microsoft Windows. Para instalarlo en Ubuntu podemos usar el comando `sudo apt install python3-tkinter` y para Manjaro Linux con el comando `sudo pacman -S tk`.
 
 Tkinter funciona mediante **widgets**, que son elementos predefinidos que podemos ir incrustando en nuestra aplicacion, como pueden ser un boton, un input de texto, o incluso, la ventana principal de la aplicacion.
@@ -2142,7 +2280,453 @@ app.mainloop()
 
 ~~~
 
-## **Decoradores**
+
+Otro ejemplo de aplicacion de escritorio con interfaz grafica.
+El juego se llama yo nunca. La estructura es la siguiente: En el directorio **raiz** crearemos los archivos principales de nuestra aplicacion. Estos seran **main.py**, **Manager.py**, y **screens.py**. Tambien crearemos en este mismo directorio la carpeta **ficheros** que contendra los archivos .txt donde escribiremos las preguntas de nuestro juego. Y por ultimo, siempre en el directorio raiz, crearemos otra carpeta llamada **constantes** que sera el paquete donde crearemos el archivo de configuracion de nuestro juego, y este contendra los archivos **__init__.py**, que se dejara vacio, **config.py**, que contendra los modos del juego y **style.py** que sera el que contendra los valores como el color de fondo, texto y demas.
+
+~~~py
+# Archivo main.py
+# ===============
+
+from Manager import Manager
+
+if __name__ == "__main__":
+    app = Manager()
+    app.mainloop()
+~~~
+
+~~~py
+# Archivo Manager.py
+# ==================
+
+import tkinter as tk
+from constantes import style
+from screens import Home, Game
+
+# tk.Frame sera nuestro parent (como el parametro parent de la clase Home en screens.py) 
+# y sera el frame que contendra al resto de pantallas.
+# Container sera el que contenga nuestros frames
+class Manager(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.title("Yo Nunca: The Game")
+        container = tk.Frame(self)
+        self.mode = "Normal"
+        # Posicionando nuestro container.
+        container.pack(
+            side = tk.TOP,
+            fill = tk.BOTH,
+            expand=True
+        )
+        container.configure(background=style.BACKGROUND)
+        # Configurando quie nuestro container tenga una fila y una columna solamente.
+        # El weight especifica el espacio que ocupa (por ejemplo que abarque dos 
+        # columnas... etc) respecto a las demas filas o columnas.
+        container.grid_columnconfigure(0,weight=1)
+        container.grid_rowconfigure(0, weight=1)
+
+        self.frames = {}
+
+        for F in (Home, Game):
+            frame = F(container, self)
+            self.frames[F] = frame
+            frame.grid(row = 0, column = 0, sticky = tk.NSEW)
+
+        self.show_frame(Home)
+
+
+    def show_frame(self, container):
+        frame = self.frames[container]
+        frame.tkraise()
+~~~
+
+~~~py
+# Archivo screens.py
+# ==================
+
+import tkinter as tk
+from constantes import style, config
+
+class Home(tk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.configure(background=style.BACKGROUND)
+        self.controller = controller
+
+        self.gameMode = tk.StringVar(self, value="Normal")
+        self.init_widgets()
+
+
+    def move_to_game(self):
+        self.controller.mode = self.gameMode.get()
+        self.controller.show_frame(Game)
+
+
+
+    def init_widgets(self):
+        tk.Label(
+            self,
+            text = "Yo Nunca: THE GAME",
+            justify = tk.CENTER,
+            # Desempaquetando el diccionario style.
+            **style.STYLE
+        ).pack(
+            side = tk.TOP,
+            fill = tk.BOTH,
+            expand = True,
+            # Estableciendo el padding X y Y.
+            padx = 22,
+            pady = 11
+        )
+
+        optionsFrame = tk.Frame(self)
+        optionsFrame.configure(background = style.COMPONENT)
+        optionsFrame.pack(
+            side = tk.TOP,
+            fill = tk.BOTH,
+            expand = True,
+            padx = 22,
+            pady = 11
+        )
+        tk.Label(
+            # En lugar del self le asignamos optionsFrame, 
+            # porque este frame se incrustara dentro del frame home, 
+            # o sea, sera un sub frame.
+            optionsFrame,
+            text = "Elige tu modo de juego",
+            justify = tk.CENTER,
+            **style.STYLE
+        ).pack(
+            side = tk.TOP,
+            fill = tk.X,
+            padx = 22,
+            pady = 11
+        )
+
+        for (key, value) in config.MODES.items():
+            tk.Radiobutton(
+                optionsFrame,
+                text = key + ("🔥" if key == "ATREVIDO" else ""),
+                variable = self.gameMode,
+                value = value,
+                activebackground = style.BACKGROUND,
+                activeforeground = style.TEXT,
+                **style.STYLE
+            ).pack(
+                side = tk.LEFT,
+                fill = tk.BOTH,
+                expand = True,
+                padx = 5,
+                pady = 5
+            )
+
+
+        tk.Button(
+            self,
+            text = "EMPEZAR!!!",
+            command = self.move_to_game,
+            **style.STYLE,
+            relief = tk.FLAT,
+            activebackground = style.BACKGROUND,
+            activeforeground = style.TEXT
+        ).pack(
+            side = tk.TOP,
+            fill = tk.X,
+            padx = 22,
+            pady = 11
+        )
+
+
+
+class Game(tk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.configure(background = style.BACKGROUND)
+        self.controller = controller
+        self.currentQuestion = tk.StringVar(self, value = "Preparados, Listos, Dale...")
+        self.fichero = None
+        self.init_widgets()
+
+
+    def update_question(self):
+        self.mode = self.controller.mode
+        if(self.fichero == None) or (self.controller.mode.lower() not in self.fichero.name.lower()):
+            self.fichero = open(f'./ficheros/{self.mode}.txt', 'r', encoding = 'utf-8')
+        tmp = self.fichero.readline()
+        if tmp != "":
+            self.currentQuestion.set(tmp)
+        else:
+            self.currentQuestion.set("Ya hemos leido todas las preguntas, volvemos a empezar")
+            self.fichero.close()
+            self.fichero = open(f'./ficheros/{self.mode}.txt', 'r', encoding = 'utf-8')
+
+    def init_widgets(self):
+        tk.Label(
+            self,
+            text = "Yo Nunca ...",
+            justify = tk.CENTER,
+            **style.STYLE
+        ).pack(
+            side = tk.TOP,
+            fill = tk.BOTH,
+            expand = True,
+            padx = 22,
+            pady = 11
+        )
+
+       
+        tk.Label(
+            self,
+            text = "Preparados, Listos, Dale...",
+            textvar = self.currentQuestion,
+            justify = tk.CENTER,
+            **style.STYLE
+        ).pack(
+            side = tk.TOP,
+            fill = tk.X,
+            padx = 22,
+            pady = 11
+        )
+
+
+        tk.Button(
+            self,
+            text = "SIGUIENTE ->",
+            command = self.update_question,
+            **style.STYLE,
+            relief = tk.FLAT,
+            activebackground = style.BACKGROUND,
+            activeforeground = style.TEXT
+        ).pack(
+            side = tk.TOP,
+            fill = tk.BOTH,
+            expand = True,
+            padx = 22,
+            pady = 11
+        )
+
+        tk.Button(
+            self,
+            text = "<- HOME",
+            command = lambda: self.controller.show_frame(Home),
+            **style.STYLE,
+            relief = tk.FLAT,
+            activebackground = style.BACKGROUND,
+            activeforeground = style.TEXT
+        ).pack(
+            side = tk.TOP,
+            fill = tk.BOTH,
+            expand = True,
+            padx = 22,
+            pady = 11
+        )
+
+~~~
+
+Archivos dentro del paquete **constantes**
+~~~py
+
+# Archivo config.py
+# =================
+
+MODES = {
+    "NORMAL": "Normal",
+    "ATREVIDO": "Atrevido",
+    "TIRULINA": "Tirulina"
+}
+~~~
+
+~~~py
+# Archivo style.py
+# =================
+
+BACKGROUND = '#121212'
+FONT = ("Arial", 16)
+COMPONENT = "#363636"
+TEXT = "#84C9FB"
+
+STYLE = {
+    "font": FONT,
+    "bg": COMPONENT,
+    "fg": TEXT
+}
+~~~
+
+
 
 # MANEJO DE BASES DE DATOS
 ## **SQLite**
+En Python podemos interactuar con diferentes tipos de bases de datos. En el presente caso lo haremos con bases de datos creadas con SQlite. Los elementos de una tabla los seleccionamos por medio de un objeto llamado **cursor**, que contendra los datos seleccionados y ademas es el encargado de leer o escribir en la tabla.
+
+Los pasos a seguir para la comunicacion con la base de datos es la siguiente:
+- Python abre conexion
+- Python genera una peticion
+- La base de datos ejecuta la peticion
+- La base de datos envia una respuesta
+- La Base de datos realiza los cambios
+- Python cierra la conexion
+
+Para hacer uso de de SQlite en Python siempre debemos importar el modulo `sqlite3`.
+
+### ***Creacion de la base de datos y tablas***
+~~~py
+import sqlite3 as sql
+
+
+def createDB():
+    conn = sql.connect("streamers.db")
+    conn.commit()
+    conn.close()
+
+
+def createTable():
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    cursor.execute(
+        """CREATE TABLE streamers (
+            name text,
+            followers integer,
+            subs integer
+        )"""
+    )
+    conn.commit()
+    conn.close()
+
+if __name__ == '__main__':
+    createDB()
+    createTable()
+    
+~~~
+
+### ***Insertar filas***
+
+~~~py
+import sqlite3 as sql
+
+def insertRow(nombre, followers, subs):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"INSERT INTO streamers VALUES ('{nombre}', {followers}, {subs})"
+    cursor.execute(instruccion)
+    conn.commit()
+    conn.close()
+
+def insertRows(streamerList):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+
+    instruccion = f"INSERT INTO streamers VALUES (?, ?, ?)"
+    cursor.executemany(instruccion, streamerList)
+    
+    conn.commit()
+    conn.close()
+
+
+if __name__ == '__main__':
+    streamers = [
+        ('Fulano', 12314312, 2342342343),
+        ('Sutano', 2343214312, 2342342343),
+        ('Mengano', 1243242312, 2342342343)
+    ]
+    insertRow("Satuzano", 42345365343, 12312312334)
+    insertRows(streamers)
+
+
+~~~
+
+### ***Leer datos***
+
+~~~py
+import sqlite3 as sql
+
+def readRows():
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"SELECT * FROM streamers"
+    cursor.execute(instruccion)
+    datos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    print(datos)
+
+
+def readOrdered(field):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"SELECT * FROM streamers ORDER BY {field} DESC"
+    cursor.execute(instruccion)
+    datos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    print(datos)
+
+
+def search(nombre):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"SELECT * FROM streamers WHERE name='{nombre}'"
+    cursor.execute(instruccion)
+    datos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    print(datos)
+
+
+def searchLike(nombre):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"SELECT * FROM streamers WHERE name like'{nombre}%'"
+    cursor.execute(instruccion) 
+    datos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    print(datos)
+
+
+
+if __name__ == '__main__':
+    readRows()
+    readOrdered("subs")
+    search('Mengano5')
+    searchLike('mengan')
+    
+~~~
+
+> Podemos hacer busquedas por palabras que empiecen por un caracter o conjunto de ellos escribiendo el simbolo de porcentaje despues de las letras iniciales que queremos buscar.
+
+### ***Actualizar registros***
+
+~~~py
+import sqlite3 as sql
+
+def updateFields(nombre, valor):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"UPDATE streamers SET subs = {valor} WHERE name='{nombre}'"
+    cursor.execute(instruccion) 
+    conn.commit()
+    conn.close()
+
+
+if __name__ == '__main__':
+    updateFields("Mengano", 123456789)
+~~~
+### ***Eliminar registros***
+
+~~~py
+import sqlite3 as sql
+
+def deleteRow(nombre):
+    conn = sql.connect("streamers.db")
+    cursor = conn.cursor()
+    instruccion = f"DELETE FROM streamers WHERE name='{nombre}'"
+    cursor.execute(instruccion) 
+    conn.commit()
+    conn.close()
+
+
+if __name__ == '__main__':
+    deleteRow('Satuzano')
+~~~
+
+> En Visual Studio Code existe la extencion **SQLite** que nos permite interactuar de manera grafica con nuestras bases de datos.
