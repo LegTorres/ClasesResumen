@@ -14,37 +14,32 @@ Cuales son las caracteristicas de git?
     - MODIFIED
     - COMMITED
 
-
 **Tabla de contenidos**
 
+- [Inicio con Git](#inicio-con-git)
 - [Ramas \(Branches\)](#ramas-o-branch)
 - [Repositorios remotos en Github](#repositorios-remotos-en-github)
 - [Conexiones cifradas por SSH](#conexiones-cifradas-con-ssh)
 
-
-
-
-
-
-
-
+## **INICIO CON GIT**
 
 ## **RAMAS O BRANCHES**
 Una rama es una version del codigo de nuestro proyecto. Ayudan a mantener el orden y a manipular el codigo de forma segura. Las ramas mas populares en el desarrollo de proyectos de software son:
 - **Rama main:** Es la rama por defecto de nuestro proyecto.
 - **Rama development:** Suelen ser ramas para hacer experimentos con nuestro codigo sin necesidad de afectar nuestro codigo principal.
-- **Rama hotfix:** Tambien se les suele llamar bug fixing y se crean al detectar algun error critico en nuestro proyecto principal para hacer los arreglos necesarios. Cuando esta corregido se fusiona con la rama principal a traves del comando merge.
+- **Rama hotfix:** Tambien se les suele llamar bug fixing y se crean al detectar algun error critico en nuestro proyecto principal para hacer los arreglos necesarios. Cuando esta corregido se fusiona con la rama principal; a esta union de diferentes ramas de un proyercto se le llama **merge**.
 
 El comando que nos muestra las ramas que tiene un proyecto es el siguiente:
 
-~~~GIT
+~~~SH
 $ git show-branch --all
 ~~~
 
-A la union de diferentes ramas de un proyecto se le llama **merge**. 
-
-
-> Nota: Hay que tener en cuenta que al hacer merge puede haber archivos que provoquen conflicto con otros archivos del proyecto.
+> Nota: Hay que tener en cuenta que al hacer merge puede haber archivos que provoquen conflicto con otros archivos del proyecto. Al estado en el que entran los archivos luego de hacer un merge en el que se detectan conflictos se le llama **unmerged**.
+> 
+>Un conflicto se arregla borrando la linea que no queremos conservar. Eso puede ser automaticamente con editores como visual studio code o manual, borrando la linea que no nos interesa.
+>
+> Un merge tambien es consideraro un **commit**.
 
 
 Cuales tipos de reset que hay?
@@ -55,33 +50,17 @@ Cuales tipos de reset que hay?
 Que representa la cabecera(HEAD)?
 Representa la rama y el commit de dicha rama donde estamos trabajando. Por defecto, sera la rama main.
 
-Que es un conflicto en git?
-Es cuando dos ramas diferentes hacen cambios distintos en una misma linea.
-
-Que es el estado unmerged?
-Es el estado en el que entran los archivos luego de hacer un merge en el que se detectan conflictos.
-
-Los merges tambien son commits?
-Verdadero.
-
-Como se arregla un conflicto durante un merge?
-Se arregla borrando la linea que no queremos conservar. Eso puede ser automaticamente con editores como visual studio code o manual, borrando la linea que no nos interesa.
-
-
 ## **REPOSITORIOS REMOTOS EN GITHUB**
 
-Es una plataforma de desarollo colaborativo para alojar proyectos utilizando git. Se emplea principalmente para la creacion de codigo fuente de programadores. Se puede considerar como un curriculum vitae, pues aqui se guarda el portafolio de proyectos de programacion.
+GitHub es una plataforma de desarollo colaborativo para alojar proyectos utilizando git. Se emplea principalmente para la creacion de codigo fuente de programadores. Se puede considerar como un curriculum vitae, pues aqui se guarda el portafolio de proyectos de programacion.
 
-Cuales son las caracteristicas de GitHub?
+Sus caracteristicas son:
 - Permite alojar proyectos en repositorios de manera gratuita y publica, aunque tiene una forma de pago para privados.
 - Puedes compartir facilmente tus proyectos.
 - Permite colaborar para mejorar los proyectos de otros y viceversa.
 - Ayuda a reducir significativamente los errores humanos, a tener un mejor mantenimiento de sistintos entornos y detectar fallos de una manera mas rapida y eficiente.
 - Es la opcion perfecta para poder trabajar en equipos dentro de un mismo proyecto.
 - Ofrece todas las ventajas de git, pero tambien ofrece otras herramientas para un mejor control de proyectos.
-
-Que es GitHub?
-Es una plataforma que nos permite guardar repositorios de Git utilizandolos de manera remota y ejecutar algunos comandos de manera visual e interactiva.
 
 Luego de crear nuestra cuenta en GitHub que podemos hacer?
 - Crear o importar repositorios.
@@ -93,7 +72,6 @@ Luego de crear nuestra cuenta en GitHub que podemos hacer?
 
 Que es el README.md?
 Es un archivo que veremos por defecto al entrar en un repositorio. Es muy buena practica configurarlos para describir el proyecto, los requerimientos y las instrucciones a seguir para contribuir correctamente.
-
 
 Comos se clona un repositorio desde GitHub?
 Se debe copiar el URL y ejecutar el comando $ git clone URL. Eso descargara la version del proyecto alojado en GitHub.
@@ -118,7 +96,6 @@ $ git push origin rama-a-enviar
 ```
 
 ## **CONEXIONES CIFRADAS CON SSH**
-
 
 
 Para que sirven las claves publicas y privadas(Cifrado asimetrico de un solo camino)
