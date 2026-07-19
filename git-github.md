@@ -2,7 +2,7 @@ ___
 # **MANUAL DE GIT Y GITHUB: DE CERO A AVANZADO**
 
 1. [FUNDAMENTOS Y CONCEPTOS BASICOS](#1-fundamentos-y-conceptos-basicos)
-    1. [¿Qué es Git y GitHub?](#que-es-git-y-github)
+    1. [¿Qué es Git?](#11-que-es-git)
     2. [Instalación y Configuración](#12-instalación-y-configuración)
     3. [Las Tres Áreas de Git](#13-las-tres-areas-de-git)
     4. [Primeros Pasos Prácticos](#14-primeros-pasos-practicos)
@@ -30,7 +30,7 @@ ___
 
 ## **1: FUNDAMENTOS Y CONCEPTOS BASICOS**
 
-### **1.1: Que es Git y GitHub?**
+### **1.1: Que es Git?**
 Git es un sistema de control de versiones (SCV por sus siglas en ingles) distribuido creado por Linus Torvalds. Lleva el control los cambios en el proyecto y tambien permite coordinar el trabajo de varias personas. Este guarda solo los cambios (Cuando se hicieron, o quien los realizo, etc.), lo cual lo hace el trabajo mucho mas eficiente.
 
 Git esta optimizado para guardar cambios de forma incremental.Permite contar con un historial, regresar a una version anterior y agregar funcionalidades.Lleva un registro de los cambios que otras personas realicen en los archivos.
@@ -66,6 +66,7 @@ Una vez instalado, el siguiente paso es configurar git. Para eso debemos agregar
 git config --global init.defaultbranch main
 git config --global user.name "Tu_Nombre"
 git config --global user.email "Tu_email@email.com"
+
 # Puedes cestablecer el editor por defecto con cualquiera de los siguientes comandos:
 git config --global core.editor "code --wait"
 git config --global core.editor "subl -w"
@@ -187,6 +188,7 @@ existen otros parametros utiles para el comando `git log`.
 ```sh
 # Muestra mensajes personalizados de los commits.
 git log --pretty=format:"%cn hizo un commit %h el dia %cd"
+git merge --abort
 
 # Filtra commits por fechas.
 git log --after=“2018-1-2”
@@ -236,16 +238,8 @@ git diff nombre_del_archivo.txt
 git diff --staged ruta/al/directorio/
 ```
 
+## **2: RAMAS Y FUSION**git merge --abort
 
-
-
-
-
-
-
-
-
-## **2: RAMAS Y FUSION**
 
 ### **2.1: ¿Qué es una Rama (Branch)?**
 
@@ -449,8 +443,74 @@ git merge --abort
 ```
 
 ## **3: EL SALTO A LA NUBE (GITHUB Y COLABORACION)**
+
 ### **3.1: Introducción a GitHub**
+
+GitHub es una plataforma de desarrollo colaborativo basada en la nube que permite a los programadores alojar, gestionar, compartir y realizar un seguimiento de sus proyectos de software. Es propiedad de Microsoft y funciona esencialmente como una red social para desarrolladores e ingenieros de software.
+
+Características principales de GitHub:
+- **Control de versiones:** Permite revertir errores regresando a versiones anteriores del código sin perder el progreso actual.
+- **Trabajo en equipo:** Los desarrolladores pueden trabajar simultáneamente en el mismo proyecto mediante "ramas" (branches). Esto evita que los cambios de una persona sobrescriban o rompan el trabajo de otra.
+- **Herramientas de colaboración:** Ofrece funciones como las Pull Requests (solicitudes para revisar e integrar código nuevo) e Issues (reportes para reportar fallos o sugerir mejoras).
+- **Comunidad de código abierto:** Alberga millones de proyectos públicos donde desarrolladores de todo el mundo comparten sus códigos de forma gratuita para que otros aprendan o ayuden a mejorarlos.
+- **Automatización e IA:** Incorpora herramientas modernas como GitHub Actions para automatizar pruebas y despliegues de software, así como asistentes de inteligencia artificial como GitHub Copilot para ayudar a escribir código más rápido.
+
 #### **Creación de cuenta y configuración de seguridad (claves SSH y tokens de acceso)**
+
+Para configurar tu entorno de GitHub de forma segura, el proceso se divide en tres pasos esenciales: la creación de la cuenta, la vinculación de tu computadora mediante una clave SSH (para subir código de forma segura) y la generación de un token de acceso (para autenticar aplicaciones o herramientas externas).
+
+Para crear una cuenta en github debemos seguir los siguientes pasos:
+
+1. Ingresa al sitio oficial en github.com.
+2. Haz clic en el botón Sign up ubicado en la esquina superior derecha.
+3. Introduce tu correo electrónico, define una contraseña segura y elige un nombre de usuario (este nombre formará parte de la URL de tus proyectos).
+4. Resuelve el acertijo visual de verificación para demostrar que no eres un robot.
+5. GitHub te enviará un código de verificación de 8 dígitos a tu correo. Ingrésalo en la web para activar la cuenta.
+
+Una vez creada la cuenta, procedemos a configurar una clave ssh don el siguiente codigo:
+
+```sh
+ssh-keygen -t ed25519 -C "tu_correo@ejemplo.com" -f "$HOME/.ssh/id_ed25519" -N ""
+
+eval "$(ssh-agent -s)"
+
+ssh-add "$HOME/.ssh/id_ed25519"
+
+```
+> Presiona Enter en todas las solicitudes que aparezcan para guardarla en la ruta por defecto y dejar la contraseña en blanco (o añade una frase de seguridad si deseas máxima protección).
+
+Copiar la clave publica generada"
+
+- **Windows (Git Bash):** cat ~/.ssh/id_ed25519.pub | clip
+- **Mac:** pbcopy < ~/.ssh/id_ed25519.pub
+- **Linux:** cat ~/.ssh/id_ed25519.pub 
+
+> (En Linux, selecciona el texto que se muestra en pantalla y cópialo manualmente)
+
+Para vincular la clave a nuestra cuenta de github seguimos los siguientes pasos:
+
+1. Ve a GitHub, haz clic en tu foto de perfil (esquina superior derecha) y selecciona Settings.
+2. En el menú lateral izquierdo, haz clic en SSH and GPG keys.
+3. Haz clic en el botón verde New SSH key.
+4. En Title, escribe un nombre que identifique a tu computadora (ej. Mi Laptop Personal).
+5. En Key, pega el código que copiaste en el Paso B.
+6. Haz clic en Add SSH key.
+
+Por ultimo configuramos lops **Tokens de Acceso Persona (PAT)**. Los tokens funcionan como contraseñas temporales con permisos limitados. Son obligatorios si usas herramientas externas (como Visual Studio Code, herramientas de línea de comandos o aplicaciones de terceros) para interactuar con tus repositorios.
+
+GitHub ofrece dos tipos de tokens. Se recomienda usar los **Fine-grained tokens** porque permiten restringir el acceso a repositorios específicos en lugar de dar acceso a toda tu cuenta.
+1. En la página de Settings de GitHub, baja en el menú izquierdo hasta el final y haz clic en **Developer settings**.
+2. Selecciona **Personal access tokens** y luego haz clic en **Fine-grained tokens**.
+3. Haz clic en **Generate new token**.
+4. Configura los datos principales:
+    1. T*oken name:* Un nombre descriptivo (ej. Acceso desde VS Code).
+    2. **Expiration:** El tiempo de vida del token (se recomiendan **30 o 60 días** por seguridad).
+    3. **Repository access:** Selecciona si tendrá acceso a todos tus proyectos (All repositories) o solo a algunos seleccionados (Only select repositories).
+5. En **Permissions**, define qué puede hacer el token. Para un uso estándar de desarrollo, despliega **Repository permissions** y marca como **Read and Write** las opciones de **Contents** (para leer y subir código) y **Metadata** (obligatoria por defecto).
+6. Haz clic en **Generate token** al final de la página.
+
+> **Importante:** Copia el token que aparece en pantalla inmediatamente y guárdalo en un lugar seguro (como un gestor de contraseñas). No podrás volver a verlo una vez que cierres la página.
+
 ### **3.2: Conectando Local con Remoto**
 #### **Crear un repositorio en GitHub.**
 #### **Vincular repositorios (git remote add origin).**
