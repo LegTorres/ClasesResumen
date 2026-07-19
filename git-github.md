@@ -11,11 +11,11 @@ ___
     2. [Gestión de Ramas](#22-gestión-de-ramas)
     3. [Fusión de Ramas (Merging)](#23-fusión-de-ramas-merging)
     4. [Resolución de Conflictos](#24-resolución-de-conflictos)
-3. EL SALTO A LA NUBE (GITHUB Y COLABORACION)
-    1. Introducción a GitHub
-    2. Conectando Local con Remoto
-    3. Actualizaciones y Sincronización
-    4. Flujo de Trabajo Colaborativo (GitHub Flow)
+3. [EL SALTO A LA NUBE (GITHUB Y COLABORACION)](#3-el-salto-a-la-nube-github-y-colaboracion)
+    1. [Introducción a GitHub](#31-introducción-a-github)
+    2. [Conectando Local con Remoto](#32-conectando-local-con-remoto)
+    3. [Actualizaciones y Sincronización](#33-actualizaciones-y-sincronización)
+    4. [Flujo de Trabajo Colaborativo (GitHub Flow)](#34-flujo-de-trabajo-colaborativo-github-flow)
 4. HERRAMIENTAS DEL DIA A DIA Y BUENAS PRACTICAS
     Cosas que salvan vidas en el trabajo diario y que diferencian a un novato de alguien con experiencia.
     1. Ignorar Archivos con .gitignore
